@@ -1,0 +1,27 @@
+@startuml
+title Spiel
+
+:Spieler: as s
+:Spieler1: as s1
+:Spieler2: as s2
+:Spiel: as sp
+:Ki: as k
+
+(KI-Auswahl) as (ki)
+(Einheitenwahl) as (ea)
+(Spielfeldgenerierung) as (sf)
+(Zug) as (z)
+(Spiel beenden) as (sb)
+
+s <|-- s1
+s <|-- s2
+
+s -> (ki)
+s -> (ea)
+k -> (ea)
+sp -> (sf)
+s -> (z)
+k -> (z)
+(z) .> (sb) : extend
+sp -> (sb)
+@enduml
