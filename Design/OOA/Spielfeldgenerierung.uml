@@ -1,0 +1,70 @@
+@startuml
+
+start
+
+:Feld = 1;
+
+repeat
+
+if () then (Spieler1 hat noch Helden)
+    :Platziere Held von Spieler1;
+    :Feld = nächstes Platzierungsfeld Team 1;
+else (Spieler1 hat keine Helden mehr)
+endif
+if () then (Spieler2 hat noch Helden)
+    :Platziere Held von Spieler2;
+    :Feld = nächstes Platzierungsfeld Team 1;
+else (Spieler2 hat keine Helden mehr)
+endif
+repeat while() is (Mindestens ein Spieler hat noch Helden)
+-> Kein Spieler hat mehr Helden;
+
+
+repeat
+
+if () then (KI hat noch Helden)
+    :Platziere Held von KI;
+    :Feld = nächstes Platzierungsfeld Team 2;
+else (KI hat keine Helden mehr)
+endif
+
+repeat while() is (KI hat noch Helden)
+-> KI hat keine Helden mehr;
+
+
+:W = 1/100;
+:Feld = 1;
+:Anzahl jedes Hindernistyps = 3;
+
+repeat
+
+if () then (Kein Held auf dem Feld)
+if () then (Setze ein Hindernis mit Wahrscheinlichkeit W)
+
+    repeat
+    :Wähle einen Hindernistyp;
+    note right : 1/3 Chance für jeden Hindernistyp
+    repeat while() is (Hindernistyp nicht mehr vorhanden)
+    -> Hindernistyp noch vorhanden;
+
+    :Setze Hindernis auf Feld;
+    :Verringere diesen Hindernistyp um 1;
+else (Setze kein Hindernis)
+endif
+else (Held auf dem Feld)
+endif
+
+if () then (Feld <= 50)
+    :W + 1/100;
+else (Feld > 50)
+    :W - 1/100;
+endif
+
+:Nächstes Feld;
+
+repeat while() is (Noch Hindernisse vorhanden und Feld <= 100)
+-> Keine Hindernisse mehr vorhanden oder Feld > 100;
+
+stop
+
+@enduml
