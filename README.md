@@ -3,6 +3,7 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbsfleisch__
 
 ## TO DO
  - [ ] OOA
+ - [ ] Einheitendesign
  - [ ] OOD
  - [ ] Programmierung
  - [ ] Testen
