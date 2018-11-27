@@ -6,22 +6,22 @@ start
 repeat
 
 if () then (Spieler1 hat noch ausreichend Budget)
-:Spieler1 kauft eine Einheit;
+    :Spieler1 kauft eine Einheit;
 else (Spieler1 hat nicht ausreichend Budget)
 endif
 
 if () then (KI hat noch ausreichend Budget)
-:KI kauft eine Einheit;
+    :KI kauft eine Einheit;
 else (KI hat nicht ausreichend Budget)
 endif
 
 if () then (Spieler2 hat noch ausreichend Budget)
-:Spieler2 kauft eine Einheit;
+    :Spieler2 kauft eine Einheit;
 else (Spieler2 hat nicht ausreichend Budget)
 endif
 
 if () then (KI hat noch ausreichend Budget)
-:KI kauft eine Einheit;
+    :KI kauft eine Einheit;
 else (KI hat nicht ausreichend Budget)
 endif
 
