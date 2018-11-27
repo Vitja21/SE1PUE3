@@ -6,7 +6,7 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbsfleisch__
  - [ ] OOD
  - [ ] Programmierung
  - [ ] Testen
- -[ ] Sinnvolles ToDo
+ - [ ] Sinnvolles ToDo
 
 ## Termine
 Do 29.11.18 __Kundentreffen__
