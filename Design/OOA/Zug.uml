@@ -16,7 +16,7 @@ repeat while() is (Held hat nicht genug Bewegung)
 -> Held hat genug Bewegung;
 
 if () then (Zeit nicht abgelaufen)
-:Held zieht auf Feld;
+    :Held zieht auf Feld;
 else (Zeit abgelaufen)
     stop
 endif
