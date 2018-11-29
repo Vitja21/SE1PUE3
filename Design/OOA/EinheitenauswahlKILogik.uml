@@ -1,0 +1,47 @@
+@startuml
+
+title Einheitenauswahl KI Logik
+
+start
+
+:GegnerHeld = letzter vom Gegner gewählter Held;
+:GegnerAtk = Höchster Wert von GegnerHeld;
+note left: Wert ist entweder Offensive / Defensive / Hinterlist
+:GegnerDef = Niedrigster Wert von GegnerHeld;
+
+:Klasse = Klasse1;
+
+repeat
+
+:EigenAtk = Angriffswert von Klasse zu GegnerDef;
+note left
+Angriffswert zu Offensive: Hinterlist
+Angriffswert zu Defensive: Offensive
+Angriffswert zu Hinterlist: Defensive;
+end note
+
+:EigenDef = Verteidigungswert von Klasse zu GegnerAtk;
+note left
+Verteidigungswert zu Offensive: Defensive
+Verteidigungswert zu Defensive: Hinterlist
+Verteidigungswert zu Hinterlist: Offensive;
+end note
+
+:Wert von Klasse = EigenDef - GegnerAtk + EigenAtk - GegnerAtk;
+
+:Klasse = nächste Klasse;
+
+repeat while () is (Noch nicht Wert aller Klassen berechnet)
+-> Wert aller Klassen berechnet;
+
+:WahlHeld = Klasse mit höchstem Wert;
+
+while ( ) is (nicht genug Budget für Wahlheld)
+:WahlHeld = Klasse mit nächst niederem Wert;
+endwhile (Genug Budget für WahlHeld)
+
+:Kaufe WahlHeld;
+
+stop
+
+@enduml
