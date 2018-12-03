@@ -1,0 +1,18 @@
+@startuml
+
+partition "Runde" {
+start
+
+:Bewegungphase┏╋┓ Spieler 1;
+:Bewegungphase┏╋┓ Spieler 2;
+
+:Angriffphase ┏╋┓:
+Spieler 1 wählt Kämpfe;
+:Angriffphase ┏╋┓:
+Spieler 2 wählt Kämpfe;
+
+:Kampfphase(Kämpfe)┏╋┓;
+
+stop
+}
+@enduml
