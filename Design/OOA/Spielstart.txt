@@ -1,0 +1,24 @@
+@startuml
+
+start
+
+
+:wähle Modus;
+
+if () then (1vs1)
+    :Starte Spiel 1vs1;
+else (vsKi)
+    :Wähle Schwierigkeitsgrad;
+	if () then (leicht)
+		:Starte Spiel in Schwierigkeitsgrad leicht;
+	elseif () then (mittel)
+		:Starte Spiel in Schwierigkeitsgrad mittel;
+	else (schwer)
+		:Starte Spiel in Schwierigkeitsgrad schwer;
+	endif
+endif
+
+
+stop
+
+@enduml

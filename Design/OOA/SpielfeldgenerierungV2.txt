@@ -1,0 +1,47 @@
+@startuml
+
+start
+
+
+repeat
+	repeat
+	:Wähle Feld zufällig zwischen A1 und J1;
+	repeat while() is (Feld ist bereits besetzt)
+	-> Feld ist frei;
+    :Platziere Held von Spieler1;
+repeat while() is (Spieler1 hat noch Helden)
+-> Spieler1 hat keine Helden mehr;
+repeat
+	repeat
+	:Wähle Feld zufällig zwischen A10 und J10;
+	repeat while() is (Feld ist bereits besetzt)
+	-> Feld ist frei;
+    :Platziere Held von Spieler2 / KI;
+repeat while() is (Spieler2 / KI hat noch Helden)
+-> Spieler2 / KI hat keine Helden mehr;
+
+
+
+:Anzahl der Hindernisse = 5;
+
+repeat
+
+	:Wähle einen Hindernis;
+        repeat
+        :Wähle zufällig zwischen Feld A2 und Feld J9 (2 benachbarte Felder bei Hindernis mit Größe 2);
+        repeat while() is (Feld besetzt)
+        -> Feld nicht besetzt;
+
+        :Setze Hindernis auf Feld;
+        :Verringere Hindernisse um 1;
+    
+    
+
+
+
+repeat while() is (Noch Hindernisse vorhanden)
+-> Keine Hindernisse mehr vorhanden;
+
+stop
+
+@enduml
