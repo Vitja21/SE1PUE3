@@ -1,27 +1,21 @@
 @startuml
-title Spiel
+left to right direction
+skinparam packageStyle rectangle
 
-:Spieler: as s
-:Spieler1: as s1
-:Spieler2: as s2
-:Spiel: as sp
-:Ki: as k
+actor Spieler
+actor KI
+actor Spiellogik
 
-(KI-Auswahl) as (ki)
-(Einheitenwahl) as (ea)
-(Spielfeldgenerierung) as (sf)
-(Zug) as (z)
-(Spiel beenden) as (sb)
-
-s <|-- s1
-s <|-- s2
-
-s -> (ki)
-s -> (ea)
-k -> (ea)
-sp -> (sf)
-s -> (z)
-k -> (z)
-(z) .> (sb) : extend
-sp -> (sb)
+rectangle Spiel {
+    Spieler - (KI-Auswahl)
+    (Spielfeldgenerierung) - Spiellogik
+    Spieler - (Runde)
+    (Runde) - KI
+    (Runde).>(Bewegungsphase):include
+    (Runde).>(Angriffsphase):include
+    (Runde).>(Kampfphase):include
+    (Runde).>(Spiel beenden):extend
+    (Spiel beenden) - Spiellogik
+    
+}
 @enduml

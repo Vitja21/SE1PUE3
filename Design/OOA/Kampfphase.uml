@@ -1,0 +1,24 @@
+@startuml 
+:Kämpfe]
+partition "Kampfphase" {
+    :Kampf = Erste Angreifer & Verteidiger & Angriffsart;
+    :Kämpfer;
+    while ( ) is ([Noch mindestens ein Kampf in Kämpfe])
+        :Suche Verteidigerkampf in Kämpfe;
+        if () then ([Nur Angreifer greift an])
+            :Verteidiger verliert ein Leben;
+        else ([Beide greifen sich gegenseitig an])
+            :Schere, Stein Papier;
+            :Verlierer verliert ein Leben;
+            :Lösche Verteidigerkampf aus Kämpfe;
+        endif
+        :Falls nicht vorhanden, füge Angreifer und Verteidiger zu Kämpfer hinzu;
+        :Lösche Kampf aus Kämpfe;
+        :Kampf = nächster Kampf in Kämpfe;
+    endwhile ([Kein Kampf mehr in Kämpfe])
+    :Überprüfe Leben aller Kämpfer;
+    :Überprüfe Spielende;
+
+    stop
+}
+@enduml
