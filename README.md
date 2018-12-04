@@ -1,5 +1,5 @@
 # SE1PUE3
-Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbsfleisch__
+Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbfleisch__
 
 ## TO DO
  - [ ] OOA
@@ -15,4 +15,5 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbsfleisch__
  - [ ] Sinnvolles ToDo
 
 ## Termine
-Do 6.12.18 __Kundentreffen__
+Do 06.12.18 __Kundentreffen__
+Di 11.12.18 __Gruppentreffen__
