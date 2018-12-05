@@ -19,7 +19,7 @@ public final class Schwertkaempfer extends Figur {
     private static int lebenspunkte = 3;
 
     public Schwertkaempfer() {
-        super(lebenspunkte, bewegungsRaster, angriffsRaster, symbol);
+        super(Schwertkaempfer.lebenspunkte, Schwertkaempfer.bewegungsRaster, Schwertkaempfer.angriffsRaster, Schwertkaempfer.symbol);
     }
 
 }

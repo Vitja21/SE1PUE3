@@ -23,7 +23,7 @@ public final class Bogenschuetze extends Figur {
     private static int lebenspunkte = 1;
 
     public Bogenschuetze() {
-        super(lebenspunkte, bewegungsRaster, angriffsRaster, symbol);
+        super(Bogenschuetze.lebenspunkte, Bogenschuetze.bewegungsRaster, Bogenschuetze.angriffsRaster, Bogenschuetze.symbol);
     }
 
 }

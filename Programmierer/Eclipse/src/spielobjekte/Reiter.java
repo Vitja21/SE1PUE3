@@ -23,7 +23,7 @@ public final class Reiter extends Figur {
     private static int lebenspunkte = 2;
 
     public Reiter() {
-        super(lebenspunkte, bewegungsRaster, angriffsRaster, symbol);
+        super(Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol);
     }
 
 }

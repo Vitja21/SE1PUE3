@@ -4,23 +4,23 @@ public class Spielobjekt {
 
     private char[][] symbol;
 
-    public Spielobjekt(char[][] symbol) {
+    public Spielobjekt(final char[][] symbol) {
         this.setSymbol(symbol);
     }
 
-    public Spielobjekt(String symbol) {
+    public Spielobjekt(final String symbol) {
         this.setSymbol(symbol);
     }
 
     public char[][] getSymbol() {
-        return symbol;
+        return this.symbol;
     }
 
-    private void setSymbol(char[][] symbol) {
+    private void setSymbol(final char[][] symbol) {
         this.symbol = symbol;
     }
 
-    private void setSymbol(String symbol) {
+    private void setSymbol(final String symbol) {
         this.symbol = new char[1][];
         this.symbol[0] = symbol.toCharArray();
     }

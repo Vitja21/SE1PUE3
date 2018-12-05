@@ -24,7 +24,7 @@ public final class Magier extends Figur {
     private static int lebenspunkte = 1;
 
     public Magier() {
-        super(lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRaster, Magier.symbol);
+        super(Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRaster, Magier.symbol);
     }
 
 }

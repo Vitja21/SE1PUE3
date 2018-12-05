@@ -6,7 +6,7 @@ public abstract class Figur extends Spielobjekt {
     private boolean[][] bewegungsRaster;
     private boolean[][] angriffsRaster;
 
-    public Figur(final int lebenspunkte, boolean[][] bewegungsRaster, boolean[][] angriffsRaster,
+    public Figur(final int lebenspunkte, final boolean[][] bewegungsRaster, final boolean[][] angriffsRaster,
             final char[][] symbol) {
         super(symbol);
         this.setLebenspunkte(lebenspunkte);
@@ -39,10 +39,10 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public boolean[][] getAngriffsRaster() {
-        return angriffsRaster;
+        return this.angriffsRaster;
     }
 
-    private void setAngriffsRaster(boolean[][] angriffsRaster) {
+    private void setAngriffsRaster(final boolean[][] angriffsRaster) {
         this.angriffsRaster = angriffsRaster;
     }
 

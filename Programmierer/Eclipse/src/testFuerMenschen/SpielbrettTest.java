@@ -8,17 +8,17 @@ import prototypen.Spielbrett;
 
 public class SpielbrettTest {
 
-    public static void main(String[] args) throws IOException {
-        Spielbrett a = Spielbrett.getInstance(10, 10);
+    public static void main(final String[] args) throws IOException {
+        final Spielbrett a = Spielbrett.getInstance(10, 10);
 
-        InputStreamReader in = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(in);
+        final InputStreamReader in = new InputStreamReader(System.in);
+        final BufferedReader br = new BufferedReader(in);
 
         // Test Bewegungseingabe
         while (true) {
             System.out.print("Befehl eingeben: ");
             a.setFehlermeldung("");
-            String eingabe = br.readLine();
+            final String eingabe = br.readLine();
             if (eingabe.toUpperCase().equals("EXIT")) {
                 break;
             }

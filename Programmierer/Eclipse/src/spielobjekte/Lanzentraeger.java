@@ -21,7 +21,7 @@ public final class Lanzentraeger extends Figur {
     private static int lebenspunkte = 1;
 
     public Lanzentraeger() {
-        super(lebenspunkte, bewegungsRaster, angriffsRaster, symbol);
+        super(Lanzentraeger.lebenspunkte, Lanzentraeger.bewegungsRaster, Lanzentraeger.angriffsRaster, Lanzentraeger.symbol);
     }
 
 }
