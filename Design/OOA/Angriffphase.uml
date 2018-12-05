@@ -2,13 +2,19 @@
 partition "Angriffsphase" {
 
     start
-
+    
+    :Kämpfe: leer;
+    note right: Hier werden alle Kämpfe mit (Angreifer, Verteidiger, Angriffsart) gespeichert
 
     while ( ) is ([Mindestens ein inaktiver Held in Kampfreichweite und Spieler passt nicht])
+        if () then ([Mehr als ein inaktiver Held in Kampfreichweite])
         repeat
         :Spieler wählt Held;
         repeat while () is ([Gewählter Held nicht in Kampfreichweite und Vorgang nicht abgebrochen])
         -> [Gewählter Held in Kampfreichweite oder Vorgang abgebrochen];
+    else ([Nur ein inaktiver Held in Kampfreichweite])
+        :Wähle einzigen Helden;
+    endif
 
         if () then ([Held wurde gewählt])
 
