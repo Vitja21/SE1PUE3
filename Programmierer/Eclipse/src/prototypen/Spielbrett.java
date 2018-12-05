@@ -111,7 +111,7 @@ public class Spielbrett {
             y = randomGenerator.nextInt(this.yLaenge);
             x = 1 + randomGenerator.nextInt(this.xLaenge - 3);
 
-            if (this.spielobjekte[y][x] == null && this.spielobjekte[y][x + 1] == null
+            if (this.spielobjekte[y][x] == null & this.spielobjekte[y][x + 1] == null
                     || this.spielobjekte[y][x].isEmpty() && this.spielobjekte[y][x + 1].isEmpty()) {
                 this.spielobjekte[y][x] = new Hindernis();
                 this.spielobjekte[y][x + 1] = new Hindernis();
@@ -399,9 +399,9 @@ public class Spielbrett {
         int xOffset = -1;
 
         char[][] rahmenChar = {
-                { '╭', '─', '─', '─', '╮' },
+                { '┌', '─', '─', '─', '┐' },
                 { '│', ' ', ' ', ' ', '│' },
-                { '╰', '─', '─', '─', '╯' } };
+                { '└', '─', '─', '─', '┘' } };
 
         Spielobjekt[][] originalSpielbrett = this.copySpielobjekte();
         Spielobjekt rahmen = new Spielobjekt(rahmenChar);
