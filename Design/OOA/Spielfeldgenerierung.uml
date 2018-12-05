@@ -5,7 +5,7 @@ start
 
 repeat
 	repeat
-	:Wähle Feld zufällig zwischen A1 und J1;
+	:WÃ¤hle Feld zufÃ¤llig zwischen A1 und J1;
 	repeat while() is (Feld ist bereits besetzt)
 	-> Feld ist frei;
     :Platziere Held von Spieler1;
@@ -13,7 +13,7 @@ repeat while() is (Spieler1 hat noch Helden)
 -> Spieler1 hat keine Helden mehr;
 repeat
 	repeat
-	:Wähle Feld zufällig zwischen A10 und J10;
+	:WÃ¤hle Feld zufÃ¤llig zwischen A10 und J10;
 	repeat while() is (Feld ist bereits besetzt)
 	-> Feld ist frei;
     :Platziere Held von Spieler2 / KI;
@@ -26,9 +26,9 @@ repeat while() is (Spieler2 / KI hat noch Helden)
 
 repeat
 
-	:Wähle einen Hindernis;
+	:WÃ¤hle einen Hindernis;
         repeat
-        :Wähle zufällig zwischen Feld A2 und Feld J9 (2 benachbarte Felder bei Hindernis mit Größe 2);
+        :WÃ¤hle zufÃ¤llig zwischen Feld A2 und Feld J9 (2 benachbarte Felder bei Hindernis mit GrÃ¶ÃŸe 2);
         repeat while() is (Feld besetzt)
         -> Feld nicht besetzt;
 
