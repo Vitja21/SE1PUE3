@@ -1,31 +1,31 @@
 @startuml
 partition "Angriffsphase" {
 
-start
+    start
 
 
-while ( ) is ([Mindestens ein inaktiver Held in Kampfreichweite und Spieler passt nicht])
-repeat
-:Spieler wählt Held;
-repeat while () is ([Gewählter Held nicht in Kampfreichweite und Vorgang nicht abgebrochen])
--> [Gewählter Held in Kampfreichweite oder Vorgang abgebrochen];
+    while ( ) is ([Mindestens ein inaktiver Held in Kampfreichweite und Spieler passt nicht])
+        repeat
+        :Spieler wählt Held;
+        repeat while () is ([Gewählter Held nicht in Kampfreichweite und Vorgang nicht abgebrochen])
+        -> [Gewählter Held in Kampfreichweite oder Vorgang abgebrochen];
 
-if () then ([Held wurde gewählt])
+        if () then ([Held wurde gewählt])
 
-repeat
-:Spieler wählt Angriffsziel;
-repeat while () is ([Angriffsziel ist nicht valide und Vorgang nicht abgebrochen])
--> [Angriffstziel ist valide oder Vorgang abgebrochen];
-if () then ([Angriffsziel ist valide])
-:Wähle Schere/Stein/Papier;
-:Speichere Angreifer, Verteidiger und Angriffsart in Kämpfe;
-else ([Vorgang abgebrochen])
-endif
+            repeat
+            :Spieler wählt Angriffsziel;
+            repeat while () is ([Angriffsziel ist nicht valide und Vorgang nicht abgebrochen])
+            -> [Angriffstziel ist valide oder Vorgang abgebrochen];
+            if () then ([Angriffsziel ist valide])
+                :Wähle Schere/Stein/Papier;
+                :Speichere Angreifer, Verteidiger und Angriffsart in Kämpfe;
+            else ([Vorgang abgebrochen])
+            endif
 
-else ([Kein Held wurde gewählt])
-endif
+        else ([Kein Held wurde gewählt])
+        endif
 
-endwhile ([Kein inaktiver Held in Kampfreichweite oder Spieler passt.])
+    endwhile ([Kein inaktiver Held in Kampfreichweite oder Spieler passt.])
 
 }
 :Kämpfe]
