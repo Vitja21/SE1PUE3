@@ -410,16 +410,18 @@ public class Spielbrett {
 
         for (int yZiel = 0; yZiel < this.yLaenge; yZiel++) {
             eingabeInt[2] = -yZiel + yOffset;
-            for (int xZiel = 0; xZiel < this.xLaenge; xZiel++) {
-                eingabeInt[3] = xZiel + xOffset;
+            for (int xZiel = 1; xZiel < this.xLaenge + 1; xZiel++) {
+                eingabeInt[3] = xZiel;
 
                 if (bewegungMoeglichSpielfeld(eingabeInt)
                         && bewegungMoeglichBelegt(eingabeInt)
                         && bewegungMoeglichRaster(this.spielobjekte[-eingabeInt[0] + yOffset][eingabeInt[1] + xOffset],
                                 -eingabeInt[0] + yOffset, eingabeInt[1] + xOffset, -eingabeInt[2] + yOffset,
                                 eingabeInt[3] + xOffset)) {
-                    // Rahmen setzen
+                    System.out.printf("[%d][%d] gesetzt%n", yZiel, xZiel);
                     this.spielobjekte[-eingabeInt[2] + yOffset][eingabeInt[3] + xOffset] = rahmen;
+                } else {
+                    System.out.printf("[%d][%d] nicht gesetzt%n", yZiel, xZiel);
                 }
             }
         }
