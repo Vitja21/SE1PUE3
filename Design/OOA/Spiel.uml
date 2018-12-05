@@ -14,6 +14,7 @@ rectangle Spiel {
     (Runde).>(Bewegungsphase):include
     (Runde).>(Angriffsphase):include
     (Runde).>(Kampfphase):include
+    (Kampfphase) - Spiellogik
     (Runde).>(Spiel beenden):extend
     (Spiel beenden) - Spiellogik
     

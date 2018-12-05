@@ -3,12 +3,12 @@
 start
 
 
-:w‰hle Modus;
+:w√§hle Modus;
 
 if () then (1vs1)
     :Starte Spiel 1vs1;
 else (vsKi)
-    :W‰hle Schwierigkeitsgrad;
+    :W√§hle Schwierigkeitsgrad;
 	if () then (leicht)
 		:Starte Spiel in Schwierigkeitsgrad leicht;
 	elseif () then (mittel)

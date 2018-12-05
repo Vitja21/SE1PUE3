@@ -5,19 +5,19 @@ start
 repeat
 	repeat
 	:Eingabe Startkoordinate und Zielkoordinate;
-	repeat while() is (Zug nicht möglich)
-	-> Zug möglich;
+	repeat while() is (Zug nicht mÃ¶glich)
+	-> Zug mÃ¶glich;
 	:Setze Figur auf Zielkoordinate;
-repeat while() is (Spieler1 hat noch bewegungsfähige Figuren)
+repeat while() is (Spieler1 hat noch bewegungsfÃ¤hige Figuren)
 -> Spieler1 hat alle seine Figuren bewegt;
 
 repeat
 	repeat
 	:Eingabe Startkoordinate und Zielkoordinate;
-	repeat while() is (Zug nicht möglich)
-	-> Zug möglich;
+	repeat while() is (Zug nicht mÃ¶glich)
+	-> Zug mÃ¶glich;
 	:Setze Figur auf Zielkoordinate;
-repeat while() is (Spieler2 hat noch bewegungsfähige Figuren)
+repeat while() is (Spieler2 hat noch bewegungsfÃ¤hige Figuren)
 -> Spieler2 hat alle seine Figuren bewegt;
 
 stop
