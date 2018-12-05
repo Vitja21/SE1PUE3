@@ -3,43 +3,47 @@ package spielobjekte;
 public abstract class Figur extends Spielobjekt {
 
     private int lebenspunkte;
-    private int schrittweite;
+    private boolean[][] bewegungsRaster;
+    private boolean[][] angriffsRaster;
 
-    public Figur(int lebenspunkte, int schrittweite, String symbol) {
-	super(symbol);
-	this.lebenspunkte = lebenspunkte;
-	this.schrittweite = schrittweite;
-    }
-
-    public Figur(int lebenspunkte2, int schrittweite2, char[][] symbol) {
-	super(symbol);
-	this.lebenspunkte = lebenspunkte;
-	this.schrittweite = schrittweite;
+    public Figur(final int lebenspunkte, boolean[][] bewegungsRaster, boolean[][] angriffsRaster,
+            final char[][] symbol) {
+        super(symbol);
+        this.setLebenspunkte(lebenspunkte);
+        this.setBewegungsRaster(bewegungsRaster);
+        this.setAngriffsRaster(angriffsRaster);
     }
 
     public void bewegen() {
-
+        // TODO
     }
 
     public void angreifen() {
-
+        // TODO
     }
 
     public int getLebenspunkte() {
-	return lebenspunkte;
+        return this.lebenspunkte;
     }
 
-    public void setLebenspunkte(int lebenspunkte) {
-	this.lebenspunkte = lebenspunkte;
+    private void setLebenspunkte(final int lebenspunkte) {
+        this.lebenspunkte = lebenspunkte;
     }
 
-    public int getSchrittweite() {
-	return schrittweite;
+    public boolean[][] getBewegungsRaster() {
+        return this.bewegungsRaster;
     }
 
-    @SuppressWarnings("unused")
-    private void setSchrittweite(int schrittweite) {
-	this.schrittweite = schrittweite;
+    private void setBewegungsRaster(final boolean[][] bewegungsRaster) {
+        this.bewegungsRaster = bewegungsRaster;
+    }
+
+    public boolean[][] getAngriffsRaster() {
+        return angriffsRaster;
+    }
+
+    private void setAngriffsRaster(boolean[][] angriffsRaster) {
+        this.angriffsRaster = angriffsRaster;
     }
 
 }

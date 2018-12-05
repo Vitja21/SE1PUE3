@@ -24,4 +24,11 @@ public class Spielobjekt {
         this.symbol = new char[1][];
         this.symbol[0] = symbol.toCharArray();
     }
+
+    public boolean isEmpty() {
+        if (this.symbol.length == 1 && this.symbol[0].length == 1 && this.symbol[0][0] == ' ') {
+            return true;
+        }
+        return false;
+    }
 }
