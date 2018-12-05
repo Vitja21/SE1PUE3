@@ -9,21 +9,21 @@ import prototypen.Spielbrett;
 public class SpielbrettTest {
 
     public static void main(String[] args) throws IOException {
-	Spielbrett a = Spielbrett.getInstance(10, 10, "DEBUG");
+        Spielbrett a = Spielbrett.getInstance(10, 10);
 
-	InputStreamReader in = new InputStreamReader(System.in);
-	BufferedReader br = new BufferedReader(in);
+        InputStreamReader in = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(in);
 
-	// Test Bewegungseingabe
-	while (true) {
-	    System.out.print("Bewegungsbefehl eingeben: ");
-	    a.setFehlermeldung("");
-	    String eingabe = br.readLine();
-	    if (eingabe.toUpperCase().equals("EXIT")) {
-		break;
-	    }
-	    a.bewegen(eingabe);
+        // Test Bewegungseingabe
+        while (true) {
+            System.out.print("Befehl eingeben: ");
+            a.setFehlermeldung("");
+            String eingabe = br.readLine();
+            if (eingabe.toUpperCase().equals("EXIT")) {
+                break;
+            }
+            a.bewegungBefehleLesen(eingabe);
 
-	}
+        }
     }
 }
