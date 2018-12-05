@@ -6,9 +6,15 @@ public abstract class Figur extends Spielobjekt {
     private int schrittweite;
 
     public Figur(int lebenspunkte, int schrittweite, String symbol) {
-        super(symbol);
-        this.lebenspunkte = lebenspunkte;
-        this.schrittweite = schrittweite;
+	super(symbol);
+	this.lebenspunkte = lebenspunkte;
+	this.schrittweite = schrittweite;
+    }
+
+    public Figur(int lebenspunkte2, int schrittweite2, char[][] symbol) {
+	super(symbol);
+	this.lebenspunkte = lebenspunkte;
+	this.schrittweite = schrittweite;
     }
 
     public void bewegen() {
@@ -20,20 +26,20 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public int getLebenspunkte() {
-        return lebenspunkte;
+	return lebenspunkte;
     }
 
     public void setLebenspunkte(int lebenspunkte) {
-        this.lebenspunkte = lebenspunkte;
+	this.lebenspunkte = lebenspunkte;
     }
 
     public int getSchrittweite() {
-        return schrittweite;
+	return schrittweite;
     }
 
     @SuppressWarnings("unused")
     private void setSchrittweite(int schrittweite) {
-        this.schrittweite = schrittweite;
+	this.schrittweite = schrittweite;
     }
 
 }
