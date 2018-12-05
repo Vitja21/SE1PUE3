@@ -1,10 +1,12 @@
 @startuml 
 :Kämpfe]
 partition "Kampfphase" {
-    :Kampf = Erste Angreifer & Verteidiger & Angriffsart;
-    :Kämpfer;
-    while ( ) is ([Noch mindestens ein Kampf in Kämpfe])
+    :Kampf = Erster Eintrag in Kämpfe (Angreifer, Verteidiger, Angriffsart);
+    :Kämpfer: leer;
+    note right: Hier werden alle Helden gespeichert die in dieser Runde kämpfen
+    while ( ) is ([Mindestens ein Kampf in Kämpfe])
         :Suche Verteidigerkampf in Kämpfe;
+        note right: Verteidigerkampf ist ein Kampf in dem der aktuelle Verteidiger als Angreifer vorkommt
         if () then ([Nur Angreifer greift an])
             :Verteidiger verliert ein Leben;
         else ([Beide greifen sich gegenseitig an])
@@ -15,7 +17,7 @@ partition "Kampfphase" {
         :Falls nicht vorhanden, füge Angreifer und Verteidiger zu Kämpfer hinzu;
         :Lösche Kampf aus Kämpfe;
         :Kampf = nächster Kampf in Kämpfe;
-    endwhile ([Kein Kampf mehr in Kämpfe])
+    endwhile ([Kein Kampf in Kämpfe])
     :Überprüfe Leben aller Kämpfer;
     :Überprüfe Spielende;
 
