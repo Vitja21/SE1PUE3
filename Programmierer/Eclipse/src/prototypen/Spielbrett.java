@@ -2,7 +2,6 @@ package prototypen;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import spielobjekte.Bogenschuetze;
@@ -57,20 +56,32 @@ public class Spielbrett {
     }
 
     private void setFiguren() {
-
-        ArrayList<Figur> temp1 = figurenSpieler1;
-        ArrayList<Figur> temp2 = figurenSpieler2;
-        Collections.shuffle(temp1);
-        Collections.shuffle(temp2);
+        ArrayList<Figur> gesetzteFiguren = new ArrayList<>();
+        Random randomGenerator = new Random();
+        int index;
+        final int maxFiguren = (figurenSpieler1.size() > figurenSpieler2.size() ? figurenSpieler1.size()
+                : figurenSpieler2.size());
+        int x = 0;
         for (int y = 0; y < this.spielobjekte.length; y++) {
-            if (y % 2 == 0) {
-                this.spielobjekte[y][0] = temp1.get(0);
-                temp1.remove(0);
-                Collections.shuffle(temp1);
-            } else if (y % 2 == 1) {
-                this.spielobjekte[y][9] = temp2.get(0);
-                temp2.remove(0);
-                Collections.shuffle(temp2);
+            // SPIELER 1
+            if (y % (this.spielobjekte.length / maxFiguren) == 0
+                    || y % (this.spielobjekte.length / maxFiguren) == (this.spielobjekte.length / maxFiguren)) {
+                do {
+                    index = randomGenerator.nextInt(figurenSpieler1.size());
+                } while (gesetzteFiguren.contains(figurenSpieler1.get(index))
+                        && (gesetzteFiguren.size() < (figurenSpieler1.size() + figurenSpieler2.size())));
+                this.spielobjekte[y][x] = figurenSpieler1.get(index);
+                gesetzteFiguren.add(figurenSpieler1.get(index));
+                x = this.spielobjekte[y].length - 1;
+            }
+            if (y % (this.spielobjekte.length / maxFiguren) + 1 == (this.spielobjekte.length / maxFiguren)) {
+                do {
+                    index = randomGenerator.nextInt(figurenSpieler2.size());
+                } while (gesetzteFiguren.contains(figurenSpieler2.get(index))
+                        && (gesetzteFiguren.size() < (figurenSpieler1.size() + figurenSpieler2.size())));
+                this.spielobjekte[y][x] = figurenSpieler2.get(index);
+                gesetzteFiguren.add(figurenSpieler2.get(index));
+                x = 0;
             }
         }
     }
