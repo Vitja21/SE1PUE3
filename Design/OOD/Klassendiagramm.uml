@@ -1,0 +1,146 @@
+@startuml
+
+Spiel o-- Spieler
+Spielbrett *-- Feld
+Spielobjekt <|-- Hindernis
+Spielobjekt <|-- Figur
+Figur <|-- Schwertkaempfer
+Figur <|-- Reiter
+Figur <|-- Magier
+Figur <|-- Bogenschuetze
+Figur <|-- Lanzentraeger
+Spieler <|-- KI
+KI <|-- EasyKI
+KI <|-- MediumKI
+KI <|-- HardKI
+Spieler <|-- Mensch
+
+note "Koordinaten dienen nur als Schnittstelle zum menschl. Spieler,\nintern arbeiten wir mit einem Array von Feldern und deren Index" as nKoord
+
+note "Jede Figur hat je eine Liste mit validen Feldern\nzur Bewegung und zum Angriff.\n" as nFListe
+
+note "Ist der Angreifer ein Magier\nsind bis zu 3 Verteidiger möglich." as nMagier
+
+note "Dies ist die ausführende Klasse, die den Spielablauf strukturiert\nund die Spieler verwaltet." as nSpiel
+
+note "Jede Figur weiß auf welchem Feld sie steht und jedes Feld weiß ob/was auf ihm steht.\nBei Bewegung müssen sowohl die Figur als auch die entspr. Felder geupdatet werden." as nBewegung
+
+Spielbrett .. nKoord
+Feld .. nKoord
+Mensch .. nKoord
+
+Figur .. nFListe
+
+Kampf .. nMagier
+
+Spiel .. nSpiel
+
+Feld .. nBewegung
+Figur .. nBewegung
+
+class  Spiel {
+    -spieler1: Spieler
+    -spieler2: Spieler
+    -spielmodusAuswaehlen(): Spieler[2]
+    -schwierigkeitsgradWaehlen(): KI
+    -initialisiereSpiel(): void
+    -spieleRunde(): void
+    -spieleKampfphase(ArrayList<Kampf>): void
+    -ueberpruefeSpielende(): boolean 
+    -main(): void 
+}
+
+class Spieler <<abstract>> {
+    -number: int
+    -helden: Figur[5]
+    +Bewegungsphase()
+    +Angriffphase(): ArrayList<Kampf>
+}
+
+class KI <<abstract>> {
+    -berechneFeindBewegung(): ArrayList<Feld>
+    -berechneFeindAngriff(): ArrayList<Feld>
+    -waehleBewegung(): void
+    -waehleAngriff(): void
+}
+
+class EasyKI {
+}
+
+class MediumKI {
+}
+
+class HardKI {
+}
+
+
+class Kampf {
+    -angreifer: Figur
+    -verteidiger: Figur[]
+    -angriffsart: Angriffsart
+}
+
+enum Angriffsart {
+    SCHERE
+    STEIN
+    PAPIER
+    +schlägt(Angriffsart): boolean
+}
+
+class Spielobjekt <<abstract>>{
+    -feld: Feld
+    -symbol: String
+}
+
+class Figur <<abstract>>{
+    -team: Spieler
+    -lebenspunkte: int
+    -tot: boolean 
+    -bewegt: boolean 
+    -gekaempft: boolean 
+    -bewegungsfelder: ArrayList<Feld>
+    -angriffselder: ArrayList<Feld>
+    +checkBewegungsfelder(): ArrayList<Feld>
+    +checkAngriffsfelder(): ArrayList<Feld>
+    +bewege(Feld): void
+
+}
+
+class Hindernis {
+}
+
+class Schwertkaempfer {
+}
+
+class Reiter {
+}
+
+class Magier {
+}
+
+class Bogenschuetze {
+}
+
+class Lanzentraeger {
+}
+
+class Mensch {
+    -koordZuFeldIndex(String): int[2]
+    -waehleBewegung(): void
+    -waehleAngriff(): void
+}
+
+class Spielbrett <<Singleton>> {
+    -felder: Feld[10][10]
+    +generiere(): void
+    +zeichne(): void
+    -zeichneFeld(): void
+    -zeichneBeschreibung(): void
+}
+
+class Feld {
+    -koord: String
+    -inhalt: Spielobjekt
+    +isEmpty(): boolean
+}
+@enduml
