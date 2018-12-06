@@ -101,7 +101,7 @@ class Figur <<abstract>>{
     -bewegungsfelder: ArrayList<Feld>
     -angriffselder: ArrayList<Feld>
     +checkBewegungsfelder(): ArrayList<Feld>
-    +checkAngriffsfelder(): ArrayList<Feld>
+    +checkAngriffsfelder(Feld): ArrayList<Feld>
     +bewege(Feld): void
 
 }
