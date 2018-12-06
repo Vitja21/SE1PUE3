@@ -1,0 +1,25 @@
+@startuml
+
+:Held = Held mit offenem Angriff;
+
+partition "KiWaehleAngriff" {
+    :Ziel = Erstes potentielles Opfer (aus Angriffsfelder);
+
+    while ( ) is ([Ziel vorhanden])
+        :Score des Ziels = LebenspunkteZiel;
+        if () then ([Held hat 1 Lebenspunkt])
+            :Score - 4 falls Ziel den Held angreifen könnte;
+            note right: Durch -4 wird sichergestellt das immer ein Ziel gewählt wird das den Held angreifen könnte
+        else ([Held hat >Lebenspunkt])
+            :Score - 1 falls Ziel den Held nicht angreifen kann;
+        endif
+        :Ziel = nächstes potentielles Opfer (aus Angriffsfelder);
+    endwhile([Kein Ziel vorhanden])
+
+    :Wähle Ziel mit niedrigster Score;
+    :Wähle zufällige Angriffsart;
+
+    stop
+}
+
+@enduml

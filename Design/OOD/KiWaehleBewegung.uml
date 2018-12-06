@@ -1,0 +1,32 @@
+@startuml
+
+:Held = zu bewegender Held;
+
+partition "Ki Waehle Bewegung" {
+    :Mögliche Ziele = leer;
+    :Mögliche Angegriffene Felder =leer;
+    :Gegner = gegnerische Helden;
+    :potentielles Opfer = erster Gegner;
+
+    repeat
+    :Zu Mögliche Ziele hinzufügen: Alle Bewegungsmöglichkeiten vom potentiellen Opfer;
+    note left: Diese Information müssen auf dem Stand vor der Bewegungsphase des Gegners sein!
+    :Zu Mögliche Angegriffene Felder hinzufügen: Alle Angriffsmöglichkeiten vom Potentiellen Opfer von jeder seiner Bewegungsmöglichkeiten aus;
+    :potentielles Opfer = nächster Gegner;
+    repeat while () is ([Noch Gegner abzuarbeiten])
+    -> [Keine Gegner mehr abzuarbeiten];
+    :Scores = leer;
+    :BMöglichkeit = erste Bewegungsmöglichkeit;
+    note right: Bewegungsmöglichkeit ist ein Feld auf das unser Held ziehen kann
+    repeat
+    :Angriffschance = Anzahl Übereinstimmungen von Angriffsmöglichkeiten mit Möglichen Zielen;
+    :Verteidigungschance = Anzahl Übereinstimmungen von Bewegungsmöglichkeit mit Möglichen Angegriffenen Feldern;
+    :Punkte = Angriffschance - Verteidigungschance;
+    :Füge Bewegungsmöglichkeit und  Punkte zu Scores hinzu;
+    repeat while () is ([Noch Bewegungsmöglichkeiten abzuarbeiten])
+    -> [Keine Bewegungsmöglichkeiten mehr abzuarbeiten];
+    :Wähle Bewegungsmöglichkeit mit höchster Punktzahl;
+    note right: Hier wäre zu überlegen ob man nicht die besten paar Ergebnisse\n noch mit den anderen Helden krossreferenziert so das wenige gegnerische Helden gefocused werden.\n Auch könnte man die Leben der potentiellen gegnerischen Ziele mit einbeziehen.
+
+}
+@enduml
