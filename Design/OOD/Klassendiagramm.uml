@@ -132,6 +132,8 @@ class Mensch {
 
 class Spielbrett <<Singleton>> {
     -felder: Feld[10][10]
+    -instance: Spielbrett
+    {static} getInstance(): Spielbrett
     +generiere(): void
     +zeichne(): void
     -zeichneFeld(): void
