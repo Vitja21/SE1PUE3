@@ -10,6 +10,7 @@ partition "Ki Waehle Bewegung" {
 
     repeat
     :Zu Mögliche Ziele hinzufügen: Alle Bewegungsmöglichkeiten vom potentiellen Opfer;
+    note left: Diese Information müssen auf dem Stand vor der Bewegungsphase des Gegners sein!
     :Zu Mögliche Angegriffene Felder hinzufügen: Alle Angriffsmöglichkeiten vom Potentiellen Opfer von jeder seiner Bewegungsmöglichkeiten aus;
     :potentielles Opfer = nächster Gegner;
     repeat while () is ([Noch Gegner abzuarbeiten])
