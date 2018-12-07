@@ -212,7 +212,7 @@ public class Spielbrett {
 
                     if ((i % this.yFeldLaenge) == (this.yFeldLaenge / 2)
                             && j % this.xFeldLaenge == (this.xFeldLaenge / 2)) {
-                        output.append((char) ('A' + this.yLaenge - y - 1));
+                        output.append((char) ('A' + y));
                     } else {
                         output.append(' ');
                     }
@@ -384,7 +384,7 @@ public class Spielbrett {
         i = 1;
         for (final String s : eingabe.split("[^a-z]+")) {
             if (!s.isEmpty() && i < 4) {
-                eingabeInt[i] = -s.toCharArray()[0] + ('a' + this.yLaenge - 1);
+                eingabeInt[i] = s.toCharArray()[0] - 'a';
                 i += 2;
             }
         }
