@@ -1,7 +1,9 @@
 package prototypen;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import spielobjekte.Bogenschuetze;
@@ -27,10 +29,20 @@ public class Spielbrett {
     private int xLaenge;
     private int yLaenge;
 
-    // TODO: Evtl. Dynamische Bestimmung der feldLaenge abhängig von
-    // xLaenge, yLaenge, oder maxSymbolgröße;
-    private final int xFeldLaenge = 5;
+    private final int xFeldLaenge = 7;
     private final int yFeldLaenge = 3;
+
+    public void setFehlermeldung(String fehlermeldung) {
+        this.fehlermeldung = fehlermeldung;
+    }
+
+    public int getXLaenge() {
+        return this.xLaenge;
+    }
+
+    public int getYLaenge() {
+        return this.yLaenge;
+    }
 
     private Spielbrett(final Spielobjekt[][] spielobjekte) {
         this.setSpielobjekte(spielobjekte);
@@ -68,32 +80,22 @@ public class Spielbrett {
     }
 
     private void setFiguren() {
-        final ArrayList<Figur> gesetzteFiguren = new ArrayList<>();
-        final Random randomGenerator = new Random();
-        int index;
-        final int maxFiguren = (this.figurenSpieler1.size() > this.figurenSpieler2.size() ? this.figurenSpieler1.size()
-                : this.figurenSpieler2.size());
-        int x = 0;
+
+        ArrayList<Figur> temp1 = figurenSpieler1;
+        ArrayList<Figur> temp2 = figurenSpieler2;
+        Collections.shuffle(temp1);
+        Collections.shuffle(temp2);
         for (int y = 0; y < this.spielobjekte.length; y++) {
-            // SPIELER 1
-            if (y % (this.spielobjekte.length / maxFiguren) == 0
-                    || y % (this.spielobjekte.length / maxFiguren) == (this.spielobjekte.length / maxFiguren)) {
-                do {
-                    index = randomGenerator.nextInt(this.figurenSpieler1.size());
-                } while (gesetzteFiguren.contains(this.figurenSpieler1.get(index))
-                        && (gesetzteFiguren.size() < (this.figurenSpieler1.size() + this.figurenSpieler2.size())));
-                this.spielobjekte[y][x] = this.figurenSpieler1.get(index);
-                gesetzteFiguren.add(this.figurenSpieler1.get(index));
-                x = this.spielobjekte[y].length - 1;
-            }
-            if (y % (this.spielobjekte.length / maxFiguren) + 1 == (this.spielobjekte.length / maxFiguren)) {
-                do {
-                    index = randomGenerator.nextInt(this.figurenSpieler2.size());
-                } while (gesetzteFiguren.contains(this.figurenSpieler2.get(index))
-                        && (gesetzteFiguren.size() < (this.figurenSpieler1.size() + this.figurenSpieler2.size())));
-                this.spielobjekte[y][x] = this.figurenSpieler2.get(index);
-                gesetzteFiguren.add(this.figurenSpieler2.get(index));
-                x = 0;
+            if (y % 2 == 0) {
+                this.spielobjekte[y][0] = temp1.get(0);
+                this.spielobjekte[y][0].setPosition(new Point(0, y));
+                temp1.remove(0);
+                Collections.shuffle(temp1);
+            } else if (y % 2 == 1) {
+                this.spielobjekte[y][9] = temp2.get(0);
+                this.spielobjekte[y][9].setPosition(new Point(9, y));
+                temp2.remove(0);
+                Collections.shuffle(temp2);
             }
         }
     }
@@ -114,7 +116,9 @@ public class Spielbrett {
             if (this.spielobjekte[y][x] == null & this.spielobjekte[y][x + 1] == null
                     || this.spielobjekte[y][x].isEmpty() && this.spielobjekte[y][x + 1].isEmpty()) {
                 this.spielobjekte[y][x] = new Hindernis();
+                this.spielobjekte[y][x].setPosition(new Point(x, y));
                 this.spielobjekte[y][x + 1] = new Hindernis();
+                this.spielobjekte[y][x + 1].setPosition(new Point(x + 1, y));
                 anzahlGrosseHindernisse--;
             }
         }
@@ -125,6 +129,7 @@ public class Spielbrett {
 
             if (this.spielobjekte[y][x] == null || this.spielobjekte[y][x].isEmpty()) {
                 this.spielobjekte[y][x] = new Hindernis();
+                this.spielobjekte[y][x].setPosition(new Point(x, y));
                 anzahlKleineHindernisse--;
             }
         }
@@ -205,7 +210,8 @@ public class Spielbrett {
                 // ABC- INDEX
                 for (int j = 0; j < this.xFeldLaenge; j++) {
 
-                    if ((i % this.yFeldLaenge) == (this.yFeldLaenge / 2) && j % this.xFeldLaenge == (this.xFeldLaenge / 2)) {
+                    if ((i % this.yFeldLaenge) == (this.yFeldLaenge / 2)
+                            && j % this.xFeldLaenge == (this.xFeldLaenge / 2)) {
                         output.append((char) ('A' + this.yLaenge - y - 1));
                     } else {
                         output.append(' ');
@@ -217,8 +223,9 @@ public class Spielbrett {
                 // SPIELFELDINHALT
                 for (int x = 0; x < this.xLaenge; x++) {
                     for (int j = 0; j < this.xFeldLaenge; j++) {
-                        output.append(this.generiereSpielobjektSymbolCharArray(this.spielobjekte[y][x], this.xFeldLaenge,
-                                this.yFeldLaenge)[i][j]);
+                        output.append(
+                                this.generiereSpielobjektSymbolCharArray(this.spielobjekte[y][x], this.xFeldLaenge,
+                                        this.yFeldLaenge)[i][j]);
                     }
                     output.append(OBEN_UNTEN);
                 }
@@ -279,13 +286,16 @@ public class Spielbrett {
             }
             output.append(String.format("%n"));
         }
+
         // Geteiltes Printen aufgrund von Fehlern beim printen von großen
-        // Strings.
+        // Strings. TODO: Bessere Lösung.
         System.out.print(output.substring(0, (this.yLaenge * this.xLaenge * this.yFeldLaenge * this.xFeldLaenge)));
-        System.out.println((output.substring((this.yLaenge * this.xLaenge * this.yFeldLaenge * this.xFeldLaenge), output.length())));
+        System.out.println((output.substring((this.yLaenge * this.xLaenge * this.yFeldLaenge * this.xFeldLaenge),
+                output.length())));
     }
 
-    private char[][] generiereSpielobjektSymbolCharArray(Spielobjekt spielobjekt, final int xFeldLaenge, final int yFeldLaenge) {
+    private char[][] generiereSpielobjektSymbolCharArray(Spielobjekt spielobjekt, final int xFeldLaenge,
+            final int yFeldLaenge) {
 
         final char[][] spielfeld = new char[yFeldLaenge][xFeldLaenge];
 
@@ -347,78 +357,82 @@ public class Spielbrett {
         }
     }
 
-    public void bewegen(final int[] eingabeInt) {
+    public void bewegen(Point start, Point ziel) {
 
-        final int yOffset = 'a' + this.yLaenge - 1;
-        final int xOffset = -1;
-        // Hier müssen Bewegungsabfragen implementiert werden (am Besten nicht
-        // imperativ!)
-        if (this.bewegungMoeglichSpielfeld(eingabeInt)
-                && this.bewegungMoeglichBelegt(eingabeInt)
-                && this.bewegungMoeglichRaster(this.spielobjekte[-eingabeInt[0] + yOffset][eingabeInt[1] + xOffset],
-                        -eingabeInt[0] + yOffset, eingabeInt[1] + xOffset, -eingabeInt[2] + yOffset,
-                        eingabeInt[3] + xOffset)) {
+        if (this.getFeld(start).bewegungMoeglich(ziel)) {
             // Bewegendes Objekt von alt auf neu schieben.
-            this.spielobjekte[-eingabeInt[2] + yOffset][eingabeInt[3]
-                    + xOffset] = this.spielobjekte[-eingabeInt[0] + yOffset][eingabeInt[1] + xOffset];
+            this.setFeld(ziel, this.getFeld(start));
             // Bewegtes Objekt von alter Position entfernen.
-            this.spielobjekte[-eingabeInt[0] + yOffset][eingabeInt[1] + xOffset] = new Spielobjekt(" ");
+            this.setFeld(start, new Spielobjekt(" "));
         }
         this.updateConsole();
     }
 
-    public void bewegungBefehleLesen(String eingabe) {
+    public void bewegungBefehleInterpretieren(String eingabe) {
 
-        eingabe = eingabe.toLowerCase();
-        final int[] eingabeInt = new int[4];
-        int i = 1;
-        for (final String s : eingabe.replaceAll("\\s", "").split("[^0-9]+")) {
-            if (!s.isEmpty() && i < 4) {
-                eingabeInt[i] = Integer.parseInt(s);
+        eingabe = eingabe.toLowerCase().replaceAll("\\s", "");
+        final int[] eingabeInt = { -1, -1, -1, -1 };
+        int i = 0;
+
+        for (final String s : eingabe.split("[^0-9]+")) {
+            if (!s.isEmpty() &&
+                    i < 4) {
+                eingabeInt[i] = Integer.parseInt(s) - 1;
                 i += 2;
             }
         }
-        i = 0;
-        for (final String s : eingabe.replaceAll("\\s", "").split("[^a-z]+")) {
+        i = 1;
+        for (final String s : eingabe.split("[^a-z]+")) {
             if (!s.isEmpty() && i < 4) {
-                eingabeInt[i] = s.toCharArray()[0];
+                eingabeInt[i] = -s.toCharArray()[0] + ('a' + this.yLaenge - 1);
                 i += 2;
             }
         }
 
-        if (eingabeInt[0] > 0 && eingabeInt[2] > 0) {
-            this.bewegen(eingabeInt);
-        } else if (eingabeInt[0] > 0 && eingabeInt[2] == 0) {
-            this.printBewegen(eingabeInt[0], eingabeInt[1]);
+        Point start = new Point(eingabeInt[0], eingabeInt[1]);
+        Point ziel = new Point(eingabeInt[2], eingabeInt[3]);
+
+        if (start.y >= 0 && ziel.y >= 0) {
+            if (this.getFeld(start).bewegungMoeglich(ziel)) {
+                this.bewegen(start, ziel);
+            } else {
+                this.fehlermeldung = "Zug nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.";
+            }
+        } else {
+            this.printBewegen(start);
         }
     }
 
-    private void printBewegen(final int y, final int x) {
+    private boolean isInBounds(Point p) {
+        if (p.x >= 0 && p.x < xLaenge && p.y >= 0 && p.y < yLaenge) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        final int yOffset = 'a' + this.yLaenge - 1;
-        final int xOffset = -1;
+    private void printBewegen(Point start) {
 
         final char[][] rahmenChar = {
                 { '┌', '─', '─', '─', '┐' },
                 { '│', ' ', ' ', ' ', '│' },
                 { '└', '─', '─', '─', '┘' } };
-
-        final Spielobjekt[][] originalSpielbrett = this.copySpielobjekte();
         final Spielobjekt rahmen = new Spielobjekt(rahmenChar);
 
-        final int[] eingabeInt = { y, x, 0, 0 };
+        final Spielobjekt[][] originalSpielbrett = this.copySpielobjekte();
+
+        Point ziel = new Point();
 
         for (int yZiel = 0; yZiel < this.yLaenge; yZiel++) {
-            eingabeInt[2] = -yZiel + yOffset;
-            for (int xZiel = 1; xZiel < this.xLaenge + 1; xZiel++) {
-                eingabeInt[3] = xZiel;
 
-                if (this.bewegungMoeglichSpielfeld(eingabeInt)
-                        && this.bewegungMoeglichBelegt(eingabeInt)
-                        && this.bewegungMoeglichRaster(this.spielobjekte[-eingabeInt[0] + yOffset][eingabeInt[1] + xOffset],
-                                -eingabeInt[0] + yOffset, eingabeInt[1] + xOffset, -eingabeInt[2] + yOffset,
-                                eingabeInt[3] + xOffset)) {
-                    this.spielobjekte[-eingabeInt[2] + yOffset][eingabeInt[3] + xOffset] = rahmen;
+            ziel.y = yZiel;
+
+            for (int xZiel = 0; xZiel < this.xLaenge; xZiel++) {
+
+                ziel.x = xZiel;
+
+                if (this.getFeld(start).bewegungMoeglich(ziel)) {
+                    this.setFeld(ziel, rahmen);
                 }
             }
         }
@@ -427,58 +441,23 @@ public class Spielbrett {
         this.spielobjekte = originalSpielbrett;
     }
 
-    private boolean bewegungMoeglichBelegt(final int[] eingabeInt) {
-        final int yOffset = 'a' + this.yLaenge - 1;
-        final int xOffset = -1;
-        final boolean moeglich = (this.spielobjekte[-eingabeInt[2] + yOffset][eingabeInt[3] + xOffset] == null
-                || this.spielobjekte[-eingabeInt[2] + yOffset][eingabeInt[3] + xOffset].isEmpty());
+    public boolean bewegungMoeglichBelegt(Point ziel) {
+
+        final boolean moeglich = (this.getFeld(ziel) == null
+                || this.getFeld(ziel).isEmpty());
         if (!moeglich) {
-            this.fehlermeldung = "Zug auf dieses Feld nicht moeglich. Bereits belegt.";
+            Spielbrett.getInstance().setFehlermeldung("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
         }
         return moeglich;
     }
 
-    private boolean bewegungMoeglichSpielfeld(final int[] eingabeInt) {
-        final int yOffset = 'a' + this.yLaenge - 1;
-        final int xOffset = -1;
-        final boolean moeglich = (-eingabeInt[0] + yOffset < this.yLaenge) && ((eingabeInt[1] + xOffset) < this.xLaenge)
-                && (-eingabeInt[2] + yOffset < this.yLaenge) && ((eingabeInt[3] + xOffset) < this.xLaenge)
-                && (-eingabeInt[0] + yOffset >= 0) && ((eingabeInt[1] + xOffset) >= 0)
-                && (-eingabeInt[2] + yOffset >= 0) && ((eingabeInt[3] + xOffset) >= 0)
-                && (!(eingabeInt[0] == eingabeInt[2] && eingabeInt[1] == eingabeInt[3]));
+    public boolean bewegungMoeglichSpielfeld(Point start, Point ziel) {
+
+        final boolean moeglich = (this.isInBounds(start) && this.isInBounds(ziel) && !start.equals(ziel));
         if (!moeglich) {
             this.fehlermeldung = "Zug auf dieses Feld nicht moeglich. Außerhalb des Spielfeldes.";
         }
         return moeglich;
-    }
-
-    private boolean bewegungMoeglichRaster(final Spielobjekt spielobjekt, final int startY, final int startX, final int zielY, final int zielX) {
-        if (!Figur.class.isInstance(spielobjekt)) {
-            this.fehlermeldung = "Zug nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.";
-            return false;
-        } else {
-
-            final Figur figur = (Figur) (spielobjekt);
-            if (figur.getBewegungsRaster().length > 0 && figur.getBewegungsRaster()[0].length > 0) {
-
-                final int relativX = zielX - startX;
-                final int relativY = zielY - startY;
-
-                final int bewegungsRasterStartY = (figur).getBewegungsRaster().length / 2;
-                final int bewegungsRasterStartX = (figur).getBewegungsRaster()[0].length / 2;
-
-                if (bewegungsRasterStartY + relativY >= 0
-                        && bewegungsRasterStartY + relativY < figur.getBewegungsRaster().length) {
-                    if (bewegungsRasterStartX + relativX >= 0 && bewegungsRasterStartX
-                            + relativX < figur.getBewegungsRaster()[bewegungsRasterStartY + relativY].length) {
-                        return figur.getBewegungsRaster()[bewegungsRasterStartY + relativY][bewegungsRasterStartX
-                                + relativX];
-                    }
-                }
-            }
-        }
-        this.fehlermeldung = "Zug auf dieses Feld nicht moeglich. Auserhalb der Reichweite.";
-        return false;
     }
 
     private void updateConsole() {
@@ -509,11 +488,7 @@ public class Spielbrett {
     }
 
     public String getFehlermeldung() {
-        return this.fehlermeldung;
-    }
-
-    public void setFehlermeldung(final String fehlermeldung) {
-        this.fehlermeldung = fehlermeldung;
+        return Spielbrett.getInstance().fehlermeldung;
     }
 
     private void printFehler(final String fehler) {
@@ -536,5 +511,23 @@ public class Spielbrett {
             }
         }
 
+    }
+
+    private Spielobjekt getFeld(Point ziel) {
+        if (this.isInBounds(ziel)) {
+            return this.spielobjekte[ziel.y][ziel.x];
+        } else {
+            Spielobjekt leeresObjekt = new Spielobjekt(" ");
+            leeresObjekt.setPosition(new Point(-1, -1));
+
+            return leeresObjekt;
+        }
+    }
+
+    private void setFeld(Point ziel, Spielobjekt spielobjekt) {
+        if (this.isInBounds(ziel)) {
+            this.spielobjekte[ziel.y][ziel.x] = spielobjekt;
+            this.spielobjekte[ziel.y][ziel.x].setPosition(ziel);
+        }
     }
 }

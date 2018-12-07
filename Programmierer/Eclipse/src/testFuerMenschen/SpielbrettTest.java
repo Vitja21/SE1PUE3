@@ -9,7 +9,7 @@ import prototypen.Spielbrett;
 public class SpielbrettTest {
 
     public static void main(final String[] args) throws IOException {
-        final Spielbrett a = Spielbrett.getInstance(10, 10);
+        final Spielbrett a = Spielbrett.getInstance(10, 10, "DEBUG");
 
         final InputStreamReader in = new InputStreamReader(System.in);
         final BufferedReader br = new BufferedReader(in);
@@ -22,7 +22,7 @@ public class SpielbrettTest {
             if (eingabe.toUpperCase().equals("EXIT")) {
                 break;
             }
-            a.bewegungBefehleLesen(eingabe);
+            a.bewegungBefehleInterpretieren(eingabe);
 
         }
     }
