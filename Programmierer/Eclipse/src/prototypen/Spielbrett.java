@@ -6,13 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import spielobjekte.Bogenschuetze;
 import spielobjekte.Figur;
 import spielobjekte.Hindernis;
-import spielobjekte.Lanzentraeger;
-import spielobjekte.Magier;
-import spielobjekte.Reiter;
-import spielobjekte.Schwertkaempfer;
 import spielobjekte.Spielobjekt;
 
 public class Spielbrett {
@@ -44,12 +39,17 @@ public class Spielbrett {
 	return this.yLaenge;
     }
 
-    public Spielbrett(final Spielobjekt[][] spielobjekte) {
+    private Spielbrett(final Spielobjekt[][] spielobjekte) {
 	this.setSpielobjekte(spielobjekte);
     }
 
-    public Spielbrett() {
+//    private Spielbrett() {
+//	this(10, 10);
+//    }
+
+    private Spielbrett(Figur[] heldenSpieler1, Figur[] heldenSpieler2) {
 	this(10, 10);
+	this.generiereFiguren(heldenSpieler1, heldenSpieler2);
     }
 
     private Spielobjekt[][] copySpielobjekte() {
@@ -67,7 +67,7 @@ public class Spielbrett {
 	this.setParameter(parameter);
 
 	this.generiereSpielbrettCharArray(xLaenge, yLaenge);
-	this.generiereFiguren();
+//	this.generiereFiguren();
 	this.setFiguren();
 	this.setHindernisse();
 	this.updateConsole();
@@ -135,27 +135,42 @@ public class Spielbrett {
 	}
     }
 
-    private void generiereFiguren() {
+    // diese methode müsste auf die spieler in der klasse spiel zugreifen und deren
+    // helden in die listen einfügen oder direkt mit deren liste arbeiten
+    private void generiereFiguren(Figur[] heldenSpieler1, Figur[] heldenSpieler2) {
 
-	this.figurenSpieler1.add(new Bogenschuetze());
-	this.figurenSpieler1.add(new Lanzentraeger());
-	this.figurenSpieler1.add(new Magier());
-	this.figurenSpieler1.add(new Reiter());
-	this.figurenSpieler1.add(new Schwertkaempfer());
+	for (Figur f : heldenSpieler1)
+	    this.figurenSpieler1.add(f);
 
-	this.figurenSpieler2.add(new Bogenschuetze());
-	this.figurenSpieler2.add(new Lanzentraeger());
-	this.figurenSpieler2.add(new Magier());
-	this.figurenSpieler2.add(new Reiter());
-	this.figurenSpieler2.add(new Schwertkaempfer());
+	for (Figur f : heldenSpieler2)
+	    this.figurenSpieler2.add(f);
+
+//	this.figurenSpieler1.add(new Bogenschuetze());
+//	this.figurenSpieler1.add(new Lanzentraeger());
+//	this.figurenSpieler1.add(new Magier());
+//	this.figurenSpieler1.add(new Reiter());
+//	this.figurenSpieler1.add(new Schwertkaempfer());
+//
+//	this.figurenSpieler2.add(new Bogenschuetze());
+//	this.figurenSpieler2.add(new Lanzentraeger());
+//	this.figurenSpieler2.add(new Magier());
+//	this.figurenSpieler2.add(new Reiter());
+//	this.figurenSpieler2.add(new Schwertkaempfer());
     }
 
-    public static Spielbrett getInstance() {
+    public static Spielbrett getInstance(Figur[] heldenSpieler1, Figur[] heldenSpieler2) {
 	if (Spielbrett.instance == null) {
-	    Spielbrett.instance = new Spielbrett();
+	    Spielbrett.instance = new Spielbrett(heldenSpieler1, heldenSpieler2);
 	}
 	return Spielbrett.instance;
     }
+
+//    public static Spielbrett getInstance() {
+//	if (Spielbrett.instance == null) {
+//	    Spielbrett.instance = new Spielbrett();
+//	}
+//	return Spielbrett.instance;
+//    }
 
     public static Spielbrett getInstance(final int xLaenge, final int yLaenge, final String... parameter) {
 	if (Spielbrett.instance == null) {
@@ -441,7 +456,7 @@ public class Spielbrett {
 
 	final boolean moeglich = (this.getFeld(ziel) == null || this.getFeld(ziel).isEmpty());
 	if (!moeglich) {
-	    Spielbrett.getInstance().setFehlermeldung("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
+	    this.setFehlermeldung("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
 	}
 	return moeglich;
     }
@@ -483,7 +498,7 @@ public class Spielbrett {
     }
 
     public String getFehlermeldung() {
-	return Spielbrett.getInstance().fehlermeldung;
+	return this.fehlermeldung;
     }
 
     private void printFehler(final String fehler) {
