@@ -45,6 +45,14 @@ public abstract class Spieler {
 	this.helden = helden;
     }
 
+    public boolean hatNochNichtBewegteFiguren() {
+	boolean hatNoch = false;
+	for (Figur f : helden)
+	    if (!f.istBewegt())
+		hatNoch = true;
+	return hatNoch;
+    }
+
     public boolean istBesiegt() {
 
 	boolean besiegt = true;
