@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import spieler.Spieler;
+
 public final class Lanzentraeger extends Figur {
 
     private static boolean[][] bewegungsRaster = {
@@ -20,9 +22,9 @@ public final class Lanzentraeger extends Figur {
 
     private static int lebenspunkte = 1;
 
-    public Lanzentraeger() {
+    public Lanzentraeger(Spieler team) {
         super(Lanzentraeger.lebenspunkte, Lanzentraeger.bewegungsRaster, Lanzentraeger.angriffsRaster,
-                Lanzentraeger.symbol);
+                Lanzentraeger.symbol, team);
     }
 
 }

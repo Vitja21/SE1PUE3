@@ -3,16 +3,10 @@ package prototypen;
 import java.awt.Point;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
-import spielobjekte.Bogenschuetze;
 import spielobjekte.Figur;
 import spielobjekte.Hindernis;
-import spielobjekte.Lanzentraeger;
-import spielobjekte.Magier;
-import spielobjekte.Reiter;
-import spielobjekte.Schwertkaempfer;
 import spielobjekte.Spielobjekt;
 
 public class Spielbrett {
@@ -21,9 +15,6 @@ public class Spielbrett {
     private static Spielbrett instance;
 
     private String fehlermeldung;
-
-    ArrayList<Figur> figurenSpieler1 = new ArrayList<>();
-    ArrayList<Figur> figurenSpieler2 = new ArrayList<>();
 
     private Spielobjekt[][] spielobjekte;
     private int xLaenge;
@@ -44,15 +35,15 @@ public class Spielbrett {
         return this.yLaenge;
     }
 
-    private Spielbrett(final Spielobjekt[][] spielobjekte) {
-        this.setSpielobjekte(spielobjekte);
+    private Spielbrett(Figur[] heldenSpieler1, Figur[] heldenSpieler2, String... parameter) {
+        this.setParameter(parameter);
+        this.generiereSpielbrettSpielobjektArray(10, 10);
+        this.setHindernisse();
+        this.setFiguren(heldenSpieler1, heldenSpieler2);
+        this.updateConsole();
     }
 
-    private Spielbrett() {
-        this(10, 10);
-    }
-
-    private Spielobjekt[][] copySpielobjekte() {
+    public Spielobjekt[][] copySpielobjekte() {
         final Spielobjekt[][] copySpielobjekte = new Spielobjekt[this.yLaenge][this.xLaenge];
         for (int y = 0; y < this.yLaenge; y++) {
             for (int x = 0; x < this.xLaenge; x++) {
@@ -62,40 +53,36 @@ public class Spielbrett {
         return copySpielobjekte;
     }
 
-    private Spielbrett(final int xLaenge, final int yLaenge, final String... parameter) {
-
-        this.setParameter(parameter);
-
-        this.generiereSpielbrettCharArray(xLaenge, yLaenge);
-        this.generiereFiguren();
-        this.setFiguren();
-        this.setHindernisse();
-        this.updateConsole();
-    }
-
-    private void generiereSpielbrettCharArray(final int xLaenge, final int yLaenge) {
+    private void generiereSpielbrettSpielobjektArray(final int xLaenge, final int yLaenge) {
 
         this.spielobjekte = new Spielobjekt[yLaenge][xLaenge];
         this.setDimensionen();
     }
 
-    private void setFiguren() {
+    private void setFiguren(Figur[] heldenSpieler1, Figur[] heldenSpieler2) {
 
-        ArrayList<Figur> temp1 = figurenSpieler1;
-        ArrayList<Figur> temp2 = figurenSpieler2;
-        Collections.shuffle(temp1);
-        Collections.shuffle(temp2);
+        ArrayList<Figur> gesetzteFiguren = new ArrayList<>();
+
+        Random randomGenerator = new Random();
+        int index;
+        final int maxFiguren = (heldenSpieler1.length > heldenSpieler2.length ? heldenSpieler1.length
+                : heldenSpieler2.length);
+
         for (int y = 0; y < this.spielobjekte.length; y++) {
             if (y % 2 == 0) {
-                this.spielobjekte[y][0] = temp1.get(0);
-                this.spielobjekte[y][0].setPosition(new Point(0, y));
-                temp1.remove(0);
-                Collections.shuffle(temp1);
+                do {
+                    index = randomGenerator.nextInt(heldenSpieler1.length);
+                } while (gesetzteFiguren.contains(heldenSpieler1[index])
+                        && (gesetzteFiguren.size() < maxFiguren));
+                this.setFeld(new Point(0, y), heldenSpieler1[index]);
+                gesetzteFiguren.add(heldenSpieler1[index]);
             } else if (y % 2 == 1) {
-                this.spielobjekte[y][9] = temp2.get(0);
-                this.spielobjekte[y][9].setPosition(new Point(9, y));
-                temp2.remove(0);
-                Collections.shuffle(temp2);
+                do {
+                    index = randomGenerator.nextInt(heldenSpieler2.length);
+                } while (gesetzteFiguren.contains(heldenSpieler2[index])
+                        && (gesetzteFiguren.size() < maxFiguren));
+                this.setFeld(new Point(9, y), heldenSpieler2[index]);
+                gesetzteFiguren.add(heldenSpieler2[index]);
             }
         }
     }
@@ -113,8 +100,8 @@ public class Spielbrett {
             y = randomGenerator.nextInt(this.yLaenge);
             x = 1 + randomGenerator.nextInt(this.xLaenge - 3);
 
-            if (this.spielobjekte[y][x] == null & this.spielobjekte[y][x + 1] == null
-                    || this.spielobjekte[y][x].isEmpty() && this.spielobjekte[y][x + 1].isEmpty()) {
+            if ((this.spielobjekte[y][x] == null || this.spielobjekte[y][x].isEmpty())
+                    && (this.spielobjekte[y][x + 1] == null || this.spielobjekte[y][x + 1].isEmpty())) {
                 this.spielobjekte[y][x] = new Hindernis();
                 this.spielobjekte[y][x].setPosition(new Point(x, y));
                 this.spielobjekte[y][x + 1] = new Hindernis();
@@ -135,42 +122,19 @@ public class Spielbrett {
         }
     }
 
-    private void generiereFiguren() {
-
-        this.figurenSpieler1.add(new Bogenschuetze());
-        this.figurenSpieler1.add(new Lanzentraeger());
-        this.figurenSpieler1.add(new Magier());
-        this.figurenSpieler1.add(new Reiter());
-        this.figurenSpieler1.add(new Schwertkaempfer());
-
-        this.figurenSpieler2.add(new Bogenschuetze());
-        this.figurenSpieler2.add(new Lanzentraeger());
-        this.figurenSpieler2.add(new Magier());
-        this.figurenSpieler2.add(new Reiter());
-        this.figurenSpieler2.add(new Schwertkaempfer());
-    }
-
-    public static Spielbrett getInstance() {
+    public static Spielbrett getInstance(Figur[] heldenSpieler1, Figur[] heldenSpieler2, String... parameter) {
         if (Spielbrett.instance == null) {
-            Spielbrett.instance = new Spielbrett();
+            Spielbrett.instance = new Spielbrett(heldenSpieler1, heldenSpieler2, parameter);
         }
         return Spielbrett.instance;
     }
 
-    public static Spielbrett getInstance(final int xLaenge, final int yLaenge, final String... parameter) {
-        if (Spielbrett.instance == null) {
-            Spielbrett.instance = new Spielbrett(xLaenge, yLaenge, parameter);
-        }
+    public static Spielbrett getInstance() {
         return Spielbrett.instance;
     }
 
     public void reset() {
         Spielbrett.instance = null;
-    }
-
-    private void setSpielobjekte(final Spielobjekt[][] spielobjekte) {
-        this.spielobjekte = spielobjekte;
-        this.setDimensionen();
     }
 
     private void printBoard() {
@@ -223,9 +187,8 @@ public class Spielbrett {
                 // SPIELFELDINHALT
                 for (int x = 0; x < this.xLaenge; x++) {
                     for (int j = 0; j < this.xFeldLaenge; j++) {
-                        output.append(
-                                this.generiereSpielobjektSymbolCharArray(this.spielobjekte[y][x], this.xFeldLaenge,
-                                        this.yFeldLaenge)[i][j]);
+                        output.append(this.generiereSpielobjektSymbolCharArray(this.spielobjekte[y][x],
+                                this.xFeldLaenge, this.yFeldLaenge)[i][j]);
                     }
                     output.append(OBEN_UNTEN);
                 }
@@ -375,8 +338,7 @@ public class Spielbrett {
         int i = 0;
 
         for (final String s : eingabe.split("[^0-9]+")) {
-            if (!s.isEmpty() &&
-                    i < 4) {
+            if (!s.isEmpty() && i < 4) {
                 eingabeInt[i] = Integer.parseInt(s) - 1;
                 i += 2;
             }
@@ -392,7 +354,7 @@ public class Spielbrett {
         Point start = new Point(eingabeInt[0], eingabeInt[1]);
         Point ziel = new Point(eingabeInt[2], eingabeInt[3]);
 
-        if (start.y >= 0 && ziel.y >= 0) {
+        if (start.y >= 0 && ziel.y >= 0 && start.x >= 0 && ziel.x >= 0) {
             if (this.getFeld(start).bewegungMoeglich(ziel)) {
                 this.bewegen(start, ziel);
             } else {
@@ -413,9 +375,7 @@ public class Spielbrett {
 
     private void printBewegen(Point start) {
 
-        final char[][] rahmenChar = {
-                { '┌', '─', '─', '─', '┐' },
-                { '│', ' ', ' ', ' ', '│' },
+        final char[][] rahmenChar = { { '┌', '─', '─', '─', '┐' }, { '│', ' ', ' ', ' ', '│' },
                 { '└', '─', '─', '─', '┘' } };
         final Spielobjekt rahmen = new Spielobjekt(rahmenChar);
 
@@ -443,10 +403,9 @@ public class Spielbrett {
 
     public boolean bewegungMoeglichBelegt(Point ziel) {
 
-        final boolean moeglich = (this.getFeld(ziel) == null
-                || this.getFeld(ziel).isEmpty());
+        final boolean moeglich = (this.getFeld(ziel) == null || this.getFeld(ziel).isEmpty());
         if (!moeglich) {
-            Spielbrett.getInstance().setFehlermeldung("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
+            this.setFehlermeldung("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
         }
         return moeglich;
     }
@@ -488,7 +447,7 @@ public class Spielbrett {
     }
 
     public String getFehlermeldung() {
-        return Spielbrett.getInstance().fehlermeldung;
+        return this.fehlermeldung;
     }
 
     private void printFehler(final String fehler) {
@@ -514,7 +473,8 @@ public class Spielbrett {
     }
 
     private Spielobjekt getFeld(Point ziel) {
-        if (this.isInBounds(ziel)) {
+        if (this.isInBounds(ziel) && this.spielobjekte[ziel.y][ziel.x] != null
+                && !this.spielobjekte[ziel.y][ziel.x].isEmpty()) {
             return this.spielobjekte[ziel.y][ziel.x];
         } else {
             Spielobjekt leeresObjekt = new Spielobjekt(" ");

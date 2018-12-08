@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import spieler.Spieler;
+
 public final class Reiter extends Figur {
 
     private static boolean[][] bewegungsRaster = {
@@ -22,8 +24,8 @@ public final class Reiter extends Figur {
 
     private static int lebenspunkte = 2;
 
-    public Reiter() {
-        super(Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol);
+    public Reiter(Spieler team) {
+        super(Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol, team);
     }
 
 }

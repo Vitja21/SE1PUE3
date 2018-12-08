@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import spieler.Spieler;
+
 public final class Magier extends Figur {
 
     private static boolean[][] bewegungsRaster = {
@@ -23,8 +25,8 @@ public final class Magier extends Figur {
 
     private static int lebenspunkte = 1;
 
-    public Magier() {
-        super(Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRaster, Magier.symbol);
+    public Magier(Spieler team) {
+        super(Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRaster, Magier.symbol, team);
     }
 
 }

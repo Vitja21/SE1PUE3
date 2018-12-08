@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import spieler.Spieler;
+
 public final class Schwertkaempfer extends Figur {
 
     private static boolean[][] bewegungsRaster = {
@@ -18,9 +20,9 @@ public final class Schwertkaempfer extends Figur {
 
     private static int lebenspunkte = 3;
 
-    public Schwertkaempfer() {
+    public Schwertkaempfer(Spieler team) {
         super(Schwertkaempfer.lebenspunkte, Schwertkaempfer.bewegungsRaster, Schwertkaempfer.angriffsRaster,
-                Schwertkaempfer.symbol);
+                Schwertkaempfer.symbol, team);
     }
 
 }

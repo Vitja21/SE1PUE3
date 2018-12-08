@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import prototypen.Spielbrett;
+import spieler.Mensch;
+import spieler.Spieler;
 
 public class SpielbrettTest {
 
     public static void main(final String[] args) throws IOException {
-        final Spielbrett a = Spielbrett.getInstance(10, 10, "DEBUG");
+        Spieler spieler1 = new Mensch(1);
+        Spieler spieler2 = new Mensch(2);
+
+        final Spielbrett a = Spielbrett.getInstance(spieler1.getHelden(), spieler2.getHelden(), "DEBUG");
 
         final InputStreamReader in = new InputStreamReader(System.in);
         final BufferedReader br = new BufferedReader(in);
@@ -23,7 +28,6 @@ public class SpielbrettTest {
                 break;
             }
             a.bewegungBefehleInterpretieren(eingabe);
-
         }
     }
 }

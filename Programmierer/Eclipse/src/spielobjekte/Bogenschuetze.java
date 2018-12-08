@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import spieler.Spieler;
+
 public final class Bogenschuetze extends Figur {
 
     private static boolean[][] bewegungsRaster = {
@@ -22,9 +24,9 @@ public final class Bogenschuetze extends Figur {
 
     private static int lebenspunkte = 1;
 
-    public Bogenschuetze() {
+    public Bogenschuetze(Spieler team) {
         super(Bogenschuetze.lebenspunkte, Bogenschuetze.bewegungsRaster, Bogenschuetze.angriffsRaster,
-                Bogenschuetze.symbol);
+                Bogenschuetze.symbol, team);
     }
 
 }

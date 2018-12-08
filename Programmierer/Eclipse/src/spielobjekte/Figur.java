@@ -3,19 +3,22 @@ package spielobjekte;
 import java.awt.Point;
 
 import prototypen.Spielbrett;
+import spieler.Spieler;
 
 public abstract class Figur extends Spielobjekt {
 
     private int lebenspunkte;
+    private Spieler team;
     private boolean[][] bewegungsRaster;
     private boolean[][] angriffsRaster;
 
     public Figur(final int lebenspunkte, final boolean[][] bewegungsRaster, final boolean[][] angriffsRaster,
-            final char[][] symbol) {
+            final char[][] symbol, Spieler team) {
         super(symbol);
         this.setLebenspunkte(lebenspunkte);
         this.setBewegungsRaster(bewegungsRaster);
         this.setAngriffsRaster(angriffsRaster);
+        this.setTeam(team);
     }
 
     public void bewegen() {
@@ -79,6 +82,22 @@ public abstract class Figur extends Spielobjekt {
         if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel)
                 && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel)
                 && this.bewegungMoeglichRaster(ziel)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Spieler getTeam() {
+        return team;
+    }
+
+    public void setTeam(Spieler team) {
+        this.team = team;
+    }
+
+    public boolean istTot() {
+        if (this.getLebenspunkte() <= 0) {
             return true;
         } else {
             return false;
