@@ -11,6 +11,7 @@ import spieler.Spieler;
 public class SpielbrettTest {
 
     public static void main(final String[] args) throws IOException {
+
         Spieler spieler1 = new Mensch(1);
         Spieler spieler2 = new Mensch(2);
 

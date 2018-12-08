@@ -473,6 +473,7 @@ public class Spielbrett {
     }
 
     private Spielobjekt getFeld(Point ziel) {
+
         if (this.isInBounds(ziel) && this.spielobjekte[ziel.y][ziel.x] != null
                 && !this.spielobjekte[ziel.y][ziel.x].isEmpty()) {
             return this.spielobjekte[ziel.y][ziel.x];
