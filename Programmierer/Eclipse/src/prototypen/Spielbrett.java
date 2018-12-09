@@ -31,7 +31,6 @@ public class Spielbrett {
         this.generiereSpielbrettSpielobjektArray(10, 10);
         this.setHindernisse();
         this.setFiguren(Spiel.getSpieler1().getHelden(), Spiel.getSpieler2().getHelden());
-//	Spiel.updateConsole();
     }
 
     public Spielobjekt[][] copySpielobjekte() {
@@ -304,51 +303,6 @@ public class Spielbrett {
         }
     }
 
-//    public void bewegen(Point start, Point ziel) {
-//
-//	if (this.getFeld(start).bewegungMoeglich(ziel)) {
-//	    // Bewegendes Objekt von alt auf neu schieben.
-//	    this.setFeld(ziel, this.getFeld(start));
-//	    // Bewegtes Objekt von alter Position entfernen.
-//	    this.setFeld(start, new Spielobjekt(" "));
-//	}
-//	this.updateConsole();
-//    }
-//
-//    public void bewegungBefehleInterpretieren(String eingabe) {
-//
-//	eingabe = eingabe.toLowerCase().replaceAll("\\s", "");
-//	final int[] eingabeInt = { -1, -1, -1, -1 };
-//	int i = 0;
-//
-//	for (final String s : eingabe.split("[^0-9]+")) {
-//	    if (!s.isEmpty() && i < 4) {
-//		eingabeInt[i] = Integer.parseInt(s) - 1;
-//		i += 2;
-//	    }
-//	}
-//	i = 1;
-//	for (final String s : eingabe.split("[^a-z]+")) {
-//	    if (!s.isEmpty() && i < 4) {
-//		eingabeInt[i] = s.toCharArray()[0] - 'a';
-//		i += 2;
-//	    }
-//	}
-//
-//	Point start = new Point(eingabeInt[0], eingabeInt[1]);
-//	Point ziel = new Point(eingabeInt[2], eingabeInt[3]);
-//
-//	if (start.y >= 0 && ziel.y >= 0 && start.x >= 0 && ziel.x >= 0) {
-//	    if (this.getFeld(start).bewegungMoeglich(ziel)) {
-//		this.bewegen(start, ziel);
-//	    } else {
-//		this.fehlermeldung = "Zug nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.";
-//	    }
-//	} else {
-//	    this.printBewegen(start);
-//	}
-//    }
-
     private boolean isInBounds(Point p) {
         if (p.x >= 0 && p.x < xLaenge && p.y >= 0 && p.y < yLaenge) {
             return true;
@@ -421,5 +375,12 @@ public class Spielbrett {
             this.spielobjekte[ziel.y][ziel.x] = spielobjekt;
             this.spielobjekte[ziel.y][ziel.x].setPosition(ziel);
         }
+    }
+
+    public void bewege(Point start, Point ziel) {
+        // Bewegendes Objekt auf neue Position setzten.
+        this.setFeld(ziel, this.getFeld(start));
+        // Bewegtes Objekt von alter Position entfernen.
+        this.setFeld(start, new Spielobjekt(" "));
     }
 }

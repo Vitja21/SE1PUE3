@@ -152,7 +152,7 @@ public class Spiel {
 
             setupBewegungsphase();
             bewegungsphase(in, spieler1);
-            bewegungsphase(in, spieler1);
+            bewegungsphase(in, spieler2);
 
             kaempfe = angriffsphase(in);
             kampfphase(kaempfe);
@@ -172,7 +172,6 @@ public class Spiel {
             setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
             setNachrichtTemporaerKurz("");
             String eingabe = in.nextLine();
-            updateConsole();
             bewegungBefehleInterpretieren(eingabe, spieler);
         }
 
@@ -210,7 +209,7 @@ public class Spiel {
                 if (!((Figur) spielbrett.getFeld(start)).istBewegt()) {
 
                     if (((Figur) spielbrett.getFeld(start)).getTeam().equals(spieler)) {
-                        ((Figur) spielbrett.getFeld(start)).bewegen(start, ziel);
+                        ((Figur) spielbrett.getFeld(start)).bewegen(ziel);
                     } else {
                         setNachrichtTemporaerKurz("Zug nicht möglich, da ausgewähltes Figur nicht Spieler "
                                 + spieler.getNummer() + " gehört.");
@@ -223,7 +222,7 @@ public class Spiel {
 //		setNachrichtTemporaerKurz(
 //		"Zug nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
             }
-            updateConsole();
+            Spiel.updateConsole();
         } else {
             spielbrett.printBewegen(start);
         }
