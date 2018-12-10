@@ -1,20 +1,41 @@
 # SE1PUE3
-Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbfleisch__
+Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
 
 ## TO DO
- - [ ] OOA
- - [ ] Anwendungsfalldiagramm
- - [ ] Aktivitätsdiagramme Runde
 
+## Designer
+ - [x] OOA
+      - [x] Pflichtenheft
  - [ ] OOD
-
+      - [x] Anwendungsfalldiagramm
+      - [ ] Aktivitätsdiagramme Runde
+      - [ ] Klassendiagramm
+## Programmierer
  - [ ] Programmierung
-
+      - [ ] KI
+      - [ ] KI_Leicht
+      - [ ] KI_Mittel
+      - [ ] KI_Schwer
+ - [x] Brett
+ - [ ] Armee
+      - [ ] Magier
+      - [ ] Pikinier
+      - [ ] Reiter
+      - [ ] Bogenshütze
+      - [ ] Schwertkämpfer
+ - [ ] Sequenzen
+      - [x] Laufsequenz
+      - [ ] Kampfsequenz
+ - [ ] Hindernisse
+ - [ ] Integration der KI von anderen Teams
+ ## Tester
  - [ ] Testen
-
- - [ ] Sinnvolles ToDo
+ - [ ] Testprotokoll erstellen
+ - [ ] Testplan überlegen
+ - [ ] Testfälle überlegen
+ - [ ] Überlegung zur Qualitässicherung
+ - [x] Erstellung einheitliche Formular zur Dokumentation 
 
 ## Termine
-Do 6.12.18 __Kundentreffen__
 
 Di 11.12.18 __Gruppentreffen__
