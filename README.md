@@ -9,7 +9,21 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbfleisch__
  - [ ] OOD
 
  - [ ] Programmierung
-
+       -[ ] KI
+          -[ ] KI_Leicht
+          -[ ] KI_Mittel
+          -[ ] KI_Schwer
+       -[ ] Brett
+       -[ ] Armee
+           -[ ] Magier
+           -[ ] Pikinier
+           -[ ] Reiter
+           -[ ] Bogenshütze
+           -[ ] Schwertkämpfer
+       -[ ] Laufsequenz
+       -[ ] Kampfsequenz
+       -[ ] Hindernisse
+       -[ ] Integration der KI von anderen Teams
  - [ ] Testen
 
  - [ ] Sinnvolles ToDo
