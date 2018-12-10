@@ -18,6 +18,7 @@ import spieler.MediumKI;
 import spieler.Mensch;
 import spieler.Spieler;
 import spielobjekte.Figur;
+import spielobjekte.Spielobjekt;
 import spielphasen.Kampf;
 
 public class Spiel {
@@ -149,9 +150,11 @@ public class Spiel {
 	while (!spielZuEnde()) {
 	    ArrayList<Kampf> kaempfe;
 
+	    Spielobjekt[][] brettAktuell = spielbrett.copySpielobjekte();
+
 	    setupBewegungsphase();
-	    bewegungsphase(in, spieler1);
-	    bewegungsphase(in, spieler2);
+	    bewegungsphase(in, spieler1, brettAktuell);
+	    bewegungsphase(in, spieler2, brettAktuell);
 
 	    kaempfe = angriffsphase(in);
 	    kampfphase(kaempfe);
@@ -160,26 +163,49 @@ public class Spiel {
 
     private static void setupBewegungsphase() {
 	setNachrichtTemporaerLang("Spieler 1 Bewegungsphase\n");
-	setNachrichtTemporaerKurz("");
+	setNachrichtTemporaerKurz("Erwarte Eingabe [warten/Figur Position - Ziel Position]");
 	for (Figur f : spieler1.getHelden())
 	    f.setIstBewegt(false);
 	for (Figur f : spieler2.getHelden())
 	    f.setIstBewegt(false);
-	updateConsole();
+	updateConsole(spielbrett.copySpielobjekte());
     }
 
-    private static void bewegungsphase(Scanner in, Spieler spieler) {
+    private static void bewegungsphase(Scanner in, Spieler spieler, Spielobjekt[][] brettAktuell) {
 
 	while (spieler.hatNochNichtBewegteFiguren()) {
+
 	    setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
-	    setNachrichtTemporaerKurz("");
+	    setNachrichtTemporaerKurz("Erwarte Eingabe [warten / Figur Position - Ziel Position]");
+
 	    String eingabe = in.nextLine();
-	    bewegungBefehleInterpretieren(eingabe, spieler);
+
+	    if (eingabe.contains("warte")) {
+		warten(spieler, brettAktuell);
+	    } else {
+		bewegungBefehleInterpretieren(eingabe, spieler, brettAktuell);
+	    }
 	}
 
     }
 
-    public static void bewegungBefehleInterpretieren(String eingabe, Spieler spieler) {
+    private static void warten(Spieler spieler, Spielobjekt[][] brettAktuell) {
+	for (Figur f : spieler.getHelden())
+	    f.setIstBewegt(true);
+
+	int nummer;
+	if (spieler.getNummer() == 1)
+	    nummer = 2;
+	else
+	    nummer = 1;
+
+	setNachrichtTemporaerLang("Spieler " + nummer + ": Bewegungsphase\n");
+	setNachrichtTemporaerKurz("Spieler " + spieler.getNummer() + " beendet seine Bewegung.");
+
+	updateConsole(brettAktuell);
+    }
+
+    public static void bewegungBefehleInterpretieren(String eingabe, Spieler spieler, Spielobjekt[][] brettAktuell) {
 
 	// Entfernt alle nicht alpha-numerischen Zeichen.
 	eingabe = eingabe.toLowerCase().replaceAll("[\\W_]+", "");
@@ -221,9 +247,10 @@ public class Spiel {
 			    "Zug nicht möglich, da ausgewähltes Figur diese Runde bereits bewegt wurde.");
 		}
 	    }
-	    updateConsole();
+	    updateConsole(brettAktuell);
 	} else {
 	    spielbrett.printBewegen(start);
+	    updateConsole(spielbrett.copySpielobjekte());
 	}
     }
 
@@ -265,7 +292,7 @@ public class Spiel {
 	return gewinner;
     }
 
-    public static void updateConsole() {
+    public static void updateConsole(Spielobjekt[][] brett) {
 	if (DEBUG) {
 	    for (int i = 0; i < 20; i++) {
 		System.out.println();
@@ -274,7 +301,7 @@ public class Spiel {
 	    clearConsole();
 	}
 
-	spielbrett.printBoard();
+	spielbrett.printBoard(brett);
 
 	for (String s : nachricht)
 	    printNachricht(s);

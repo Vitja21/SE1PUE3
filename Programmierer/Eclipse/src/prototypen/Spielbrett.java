@@ -120,7 +120,7 @@ public class Spielbrett {
 	Spielbrett.instance = null;
     }
 
-    void printBoard() {
+    void printBoard(Spielobjekt[][] brett) {
 
 	// Geraden (Benennungsschema: Uhrzeigersinn, Start bei Oben)
 	final char OBEN_UNTEN = '│';
@@ -170,8 +170,8 @@ public class Spielbrett {
 		// SPIELFELDINHALT
 		for (int x = 0; x < this.xLaenge; x++) {
 		    for (int j = 0; j < this.xFeldLaenge; j++) {
-			output.append(this.generiereSpielobjektSymbolCharArray(this.spielobjekte[y][x],
-				this.xFeldLaenge, this.yFeldLaenge)[i][j]);
+			output.append(this.generiereSpielobjektSymbolCharArray(brett[y][x], this.xFeldLaenge,
+				this.yFeldLaenge)[i][j]);
 		    }
 		    output.append(OBEN_UNTEN);
 		}
@@ -342,7 +342,7 @@ public class Spielbrett {
 		    "Bewegungsanzeige nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
 	}
 
-	Spiel.updateConsole();
+	// Spiel.updateConsole();
 	this.spielobjekte = originalSpielbrett;
     }
 
