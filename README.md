@@ -1,5 +1,5 @@
 # SE1PUE3
-Dies ist die Pflichtübung 3 für SE1 des Teams __Viktor Kalbfleisch__
+Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
 
 ## TO DO
 
