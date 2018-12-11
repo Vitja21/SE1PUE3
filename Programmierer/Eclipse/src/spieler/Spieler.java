@@ -1,14 +1,11 @@
 package spieler;
 
-import java.util.ArrayList;
-
 import spielobjekte.Bogenschuetze;
 import spielobjekte.Figur;
 import spielobjekte.Lanzentraeger;
 import spielobjekte.Magier;
 import spielobjekte.Reiter;
 import spielobjekte.Schwertkaempfer;
-import spielphasen.Kampf;
 
 public abstract class Spieler {
     private int nummer;
@@ -23,13 +20,24 @@ public abstract class Spieler {
 
     }
 
-    public ArrayList<Kampf> angriffsphase() {
-        ArrayList<Kampf> phasen = new ArrayList<>();
-        return phasen;
-    }
-
     public int getNummer() {
         return this.nummer;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Spieler other = (Spieler) obj;
+//        if (!Arrays.equals(helden, other.helden))
+//            return false;
+        if (nummer != other.nummer)
+            return false;
+        return true;
     }
 
     private void setNummer(int nummer) {

@@ -1,6 +1,7 @@
 package spielobjekte;
 
 import java.awt.Point;
+import java.util.Arrays;
 
 import prototypen.Spiel;
 import prototypen.Spielbrett;
@@ -57,7 +58,7 @@ public abstract class Figur extends Spielobjekt {
         return this.angriffsRaster;
     }
 
-    private void setAngriffsRaster(final boolean[][] angriffsRaster) {
+    protected void setAngriffsRaster(final boolean[][] angriffsRaster) {
         this.angriffsRaster = angriffsRaster;
     }
 
@@ -80,8 +81,74 @@ public abstract class Figur extends Spielobjekt {
                 }
             }
         }
+
         Spiel.setNachrichtTemporaerKurz("Zug auf dieses Feld nicht moeglich. Auserhalb der Reichweite.");
         return false;
+    }
+
+    private boolean angriffMoeglichRaster(Point ziel) {
+
+        if (this.getAngriffsRaster().length > 0 && this.getAngriffsRaster()[0].length > 0) {
+
+            final int relativX = ziel.x - this.getPosition().x;
+            final int relativY = ziel.y - this.getPosition().y;
+            final int angriffsRasterStartY = this.getAngriffsRaster().length / 2;
+            final int angriffsRasterStartX = this.getAngriffsRaster()[0].length / 2;
+
+            if (angriffsRasterStartY + relativY >= 0
+                    && angriffsRasterStartY + relativY < this.getAngriffsRaster().length) {
+                if (angriffsRasterStartX + relativX >= 0 && angriffsRasterStartX
+                        + relativX < this.getAngriffsRaster()[angriffsRasterStartY + relativY].length) {
+                    return this.getAngriffsRaster()[angriffsRasterStartY + relativY][angriffsRasterStartX
+                            + relativX];
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Figur other = (Figur) obj;
+        if (!Arrays.deepEquals(angriffsRaster, other.angriffsRaster))
+            return false;
+        if (!Arrays.deepEquals(bewegungsRaster, other.bewegungsRaster))
+            return false;
+        if (istBewegt != other.istBewegt)
+            return false;
+        if (lebenspunkte != other.lebenspunkte)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (team == null) {
+            if (other.team != null)
+                return false;
+        } else if (!team.equals(other.team))
+            return false;
+        return true;
+    }
+
+    @Override
+    public boolean angriffMoeglich(Point ziel) {
+        return (this.angriffMoeglichRaster(ziel));
+    }
+
+    @Override
+    public boolean istAngreifbar(Spieler spieler) {
+        if (this.getTeam() == spieler) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
