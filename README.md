@@ -17,12 +17,12 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
       - [ ] KI_Mittel
       - [ ] KI_Schwer
  - [x] Brett
- - [ ] Armee
-      - [ ] Magier
-      - [ ] Pikinier
-      - [ ] Reiter
-      - [ ] Bogenshütze
-      - [ ] Schwertkämpfer
+ - [x] Armee
+      - [x] Magier
+      - [x] Pikinier
+      - [x] Reiter
+      - [x] Bogenshütze
+      - [x] Schwertkämpfer
  - [ ] Sequenzen
       - [x] Laufsequenz
       - [ ] Kampfsequenz
