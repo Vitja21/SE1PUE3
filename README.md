@@ -8,25 +8,25 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
       - [x] Pflichtenheft
  - [ ] OOD
       - [x] Anwendungsfalldiagramm
-      - [ ] Aktivitätsdiagramme Runde
-      - [ ] Klassendiagramm
+      - [x] Aktivitätsdiagramme Runde
+      - [ ] Aktivitätsdiagramm KI
+      - [x] Klassendiagramm
 ## Programmierer
- - [ ] Programmierung
-      - [ ] KI
+ - [ ] KI
       - [ ] KI_Leicht
       - [ ] KI_Mittel
       - [ ] KI_Schwer
  - [x] Brett
- - [ ] Armee
-      - [ ] Magier
-      - [ ] Pikinier
-      - [ ] Reiter
-      - [ ] Bogenshütze
-      - [ ] Schwertkämpfer
+ - [x] Armee
+      - [x] Magier
+      - [x] Pikinier
+      - [x] Reiter
+      - [x] Bogenshütze
+      - [x] Schwertkämpfer
  - [ ] Sequenzen
       - [x] Laufsequenz
       - [ ] Kampfsequenz
- - [ ] Hindernisse
+ - [x] Hindernisse
  - [ ] Integration der KI von anderen Teams
  ## Tester
  - [ ] Testen
@@ -38,4 +38,5 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
 
 ## Termine
 
-Di 11.12.18 __Gruppentreffen__
+Di 18.12.18 __Gruppentreffen__
+DO 20.12.18 __Gruppentreffen__
