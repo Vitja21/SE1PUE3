@@ -1,7 +1,10 @@
 @startuml
 
-Spiel o-- Spieler
+package "View" {
 Spielbrett *-- Feld
+}
+package "Model" {
+Spiel o-- Spieler
 Spielobjekt <|-- Hindernis
 Spielobjekt <|-- Figur
 Figur <|-- Schwertkaempfer
@@ -13,7 +16,10 @@ Spieler <|-- KI
 KI <|-- EasyKI
 KI <|-- MediumKI
 KI <|-- HardKI
+}
+package "Controller" {
 Spieler <|-- Mensch
+}
 
 note "Koordinaten dienen nur als Schnittstelle zum menschl. Spieler,\nintern arbeiten wir mit einem Array von Feldern und deren Index" as nKoord
 
