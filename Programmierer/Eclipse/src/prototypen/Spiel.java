@@ -238,6 +238,11 @@ public class Spiel {
 
 	if (start.x >= 0 && start.y >= 0 && ziel.x >= 0 && ziel.y >= 0) {
 
+	    if (!(spielbrett.getFeld(start) instanceof Figur)) {
+		Spiel.setNachrichtTemporaerKurz(
+			"Bewegung nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
+	    }
+
 	    if (spielbrett.getFeld(start).bewegungMoeglich(ziel)) {
 
 		if (!((Figur) spielbrett.getFeld(start)).istBewegt()) {
