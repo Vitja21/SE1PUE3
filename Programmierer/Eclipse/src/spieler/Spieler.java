@@ -9,11 +9,17 @@ import spielobjekte.Schwertkaempfer;
 
 public abstract class Spieler {
     private int nummer;
-    private Figur[] helden = { new Schwertkaempfer(this), new Bogenschuetze(this), new Lanzentraeger(this),
-            new Reiter(this), new Magier(this) };
+    private Figur[] helden;
 
     public Spieler(int nummer) {
         this.setNummer(nummer);
+        this.setHelden(this.generateHelden(this));
+    }
+
+    private Figur[] generateHelden(Spieler spieler) {
+        Figur[] helden = { new Schwertkaempfer(this), new Bogenschuetze(this), new Lanzentraeger(this),
+                new Reiter(this), new Magier(this) };
+        return helden;
     }
 
     public void bewegungsphase() {

@@ -9,7 +9,7 @@ public class Kampf {
     public Kampf(Figur angreifer, Figur verteidiger, String angriffsart) {
         this.setAngreifer(angreifer);
         this.setVerteidiger(verteidiger);
-        this.setAngreifer(angreifer);
+        this.setAngriffsart(angriffsart);
     }
 
     public Figur getAngreifer() {
@@ -38,11 +38,15 @@ public class Kampf {
 
     public String printKampf() {
 
-        String angreiferX = String.valueOf(this.getAngreifer().getPosition().x + 1);
+        int angreiferX = this.getAngreifer().getPosition().x + 1;
         String angreiferY = String.valueOf((char) (this.getAngreifer().getPosition().y + 'A'));
-        String verteidigerX = String.valueOf(this.getVerteidiger().getPosition().x + 1);
+
+        String angriffsart = this.getAngriffsart().substring(0, 1).toUpperCase() + this.getAngriffsart().substring(1);
+
+        int verteidigerX = this.getVerteidiger().getPosition().x + 1;
         String verteidigerY = String.valueOf((char) (this.getVerteidiger().getPosition().y + 'A'));
 
-        return String.format("%s%s -> %s%s", angreiferY, angreiferX, verteidigerY, verteidigerX);
+        return String.format("%s%02d - %-6s -> %s%02d", angreiferY, angreiferX, angriffsart, verteidigerY,
+                verteidigerX);
     }
 }

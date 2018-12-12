@@ -1,5 +1,8 @@
 package spielobjekte;
 
+import java.awt.Point;
+
+import prototypen.Spiel;
 import spieler.Spieler;
 
 public final class Magier extends Figur {
@@ -8,7 +11,7 @@ public final class Magier extends Figur {
             { true, true, false, true, true }, { true, true, true, true, true }, { true, true, true, true, true }, };
 
     // TODO: FALLUNTERSCHEIDUNG JE NACH SPIELSEITE !!!
-    private static boolean[][] angriffsRaster = {
+    private static boolean[][] angriffsRasterS1 = {
             { false, false, false, false, false },
             { false, false, false, true, true },
             { false, false, false, true, true },
@@ -22,15 +25,35 @@ public final class Magier extends Figur {
             { true, true, false, false, false },
             { false, false, false, false, false }, };
 
+    private static boolean[][][] angriffsRasterArray = { angriffsRasterS1, angriffsRasterS2 };
+
     private static char[][] symbol = { { 'M' } };
 
     private static int lebenspunkte = 1;
 
     public Magier(Spieler team) {
-        super("Magier", Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRaster, Magier.symbol, team);
-        if (team.getNummer() != 1) {
-            this.setAngriffsRaster(angriffsRasterS2);
-        }
+        super("Magier", Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRasterArray[team.getNummer() - 1],
+                Magier.symbol, team);
     }
 
+    @Override
+    public boolean angriffMoeglich(Point ziel) {
+
+        if (this.angriffMoeglichRaster(ziel)) {
+            if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
+                if (Spiel.getKaempfe().size() > 0) {
+                    for (Kampf k : Spiel.getKaempfe()) {
+                        if (this.equals(k.getAngreifer())
+                                && (Spiel.getSpielbrett().getFeld(ziel).equals(k.getVerteidiger()))) {
+                            return false;
+                        }
+                    }
+                    return true;
+                } else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

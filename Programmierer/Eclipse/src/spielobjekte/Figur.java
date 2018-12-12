@@ -86,7 +86,7 @@ public abstract class Figur extends Spielobjekt {
         return false;
     }
 
-    private boolean angriffMoeglichRaster(Point ziel) {
+    protected boolean angriffMoeglichRaster(Point ziel) {
 
         if (this.getAngriffsRaster().length > 0 && this.getAngriffsRaster()[0].length > 0) {
 
@@ -139,12 +139,20 @@ public abstract class Figur extends Spielobjekt {
 
     @Override
     public boolean angriffMoeglich(Point ziel) {
-        return (this.angriffMoeglichRaster(ziel));
+
+        if (this.angriffMoeglichRaster(ziel)) {
+            if (!Spiel.figurGreiftAn(this)) {
+                if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
-    public boolean istAngreifbar(Spieler spieler) {
-        if (this.getTeam() == spieler) {
+    public boolean istAngreifbar(Figur f) {
+        if (this.getTeam() == f.getTeam()) {
             return false;
         } else {
             return true;

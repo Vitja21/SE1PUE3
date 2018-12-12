@@ -2,8 +2,6 @@ package spielobjekte;
 
 import java.awt.Point;
 
-import spieler.Spieler;
-
 public class Spielobjekt {
 
     private Point position;
@@ -55,7 +53,7 @@ public class Spielobjekt {
         return false;
     }
 
-    public boolean istAngreifbar(Spieler spieler) {
+    public boolean istAngreifbar(Figur f) {
         return false;
     }
 }
