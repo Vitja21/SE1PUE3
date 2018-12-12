@@ -7,9 +7,12 @@ partition "KiWaehleAngriff" {
 
     while ( ) is ([Ziel vorhanden])
         :Score des Ziels = LebenspunkteZiel;
+        :n = Anzahl der Helden die das Ziel bereits angreifen;
+        :Score + ((n+1) - LebenspunkteZiel)*10) falls dieser Wert positiv ist!;
+        note left: Da der Verteidiger maximal einen Gegner angreifen kann,\n landet jeder zusätzliche Held einen sicheren Treffer.\nDamit es nicht zum Overkill kommt und \nwir einen Angriff verschwenden, müssen wir die Score erhöhen;
         if () then ([Held hat 1 Lebenspunkt])
             :Score - 4 falls Ziel den Held angreifen könnte;
-            note right: Durch -4 wird sichergestellt das immer ein Ziel gewählt wird das den Held angreifen könnte
+            note right: Durch -4 wird sichergestellt das immer ein Ziel\ngewählt wird das den Held angreifen könnte
         else ([Held hat >Lebenspunkt])
             :Score - 1 falls Ziel den Held nicht angreifen kann;
         endif
