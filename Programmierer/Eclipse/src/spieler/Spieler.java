@@ -11,13 +11,13 @@ public abstract class Spieler {
     private int nummer;
     private Figur[] helden;
 
-    public Spieler(int nummer) {
+    public Spieler(final int nummer) {
         this.setNummer(nummer);
         this.setHelden(this.generateHelden(this));
     }
 
-    private Figur[] generateHelden(Spieler spieler) {
-        Figur[] helden = { new Schwertkaempfer(this), new Bogenschuetze(this), new Lanzentraeger(this),
+    private Figur[] generateHelden(final Spieler spieler) {
+        final Figur[] helden = { new Schwertkaempfer(this), new Bogenschuetze(this), new Lanzentraeger(this),
                 new Reiter(this), new Magier(this) };
         return helden;
     }
@@ -31,22 +31,26 @@ public abstract class Spieler {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (this.getClass() != obj.getClass()) {
             return false;
-        Spieler other = (Spieler) obj;
+        }
+        final Spieler other = (Spieler) obj;
 //        if (!Arrays.equals(helden, other.helden))
 //            return false;
-        if (nummer != other.nummer)
+        if (this.nummer != other.nummer) {
             return false;
+        }
         return true;
     }
 
-    private void setNummer(int nummer) {
+    private void setNummer(final int nummer) {
         this.nummer = nummer;
     }
 
@@ -54,17 +58,15 @@ public abstract class Spieler {
         return this.helden;
     }
 
-    @SuppressWarnings("unused")
-    private void setHelden(Figur[] helden) {
+    private void setHelden(final Figur[] helden) {
         this.helden = helden;
     }
 
     public boolean hatNochNichtBewegteFiguren() {
         boolean hatNoch = false;
-        for (Figur f : helden) {
+        for (final Figur f : this.helden) {
             if (!f.istBewegt()) {
                 hatNoch = true;
-                break;
             }
         }
         return hatNoch;
@@ -74,8 +76,9 @@ public abstract class Spieler {
 
         boolean besiegt = true;
 
-        for (Figur f : helden)
+        for (final Figur f : this.helden) {
             besiegt = f.istTot() ? besiegt : false;
+        }
 
         return besiegt;
     }

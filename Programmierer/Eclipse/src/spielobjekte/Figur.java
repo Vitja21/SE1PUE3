@@ -17,16 +17,60 @@ public abstract class Figur extends Spielobjekt {
     private boolean istBewegt = false;
 
     public Figur(final String name, final int lebenspunkte, final boolean[][] bewegungsRaster,
-            final boolean[][] angriffsRaster, final char[][] symbol, final Spieler team) {
+            final boolean[][] angriffsRaster, final char symbol, final Spieler team) {
         super(symbol);
         this.name = name;
         this.setLebenspunkte(lebenspunkte);
         this.setBewegungsRaster(bewegungsRaster);
         this.setAngriffsRaster(angriffsRaster);
         this.setTeam(team);
+        this.symbolAddTeamNumber();
+        this.symbolAddCurrentLives();
     }
 
-    public void bewegen(Point ziel) {
+    private void symbolAddTeamNumber() {
+        this.symbol[1][4] = (char) ((this.getTeam().getNummer() + '0'));
+    }
+
+    public void symbolAddMarkActive() {
+        this.symbol[0][0] = '┌';
+        this.symbol[0][6] = '┐';
+        this.symbol[2][0] = '└';
+        this.symbol[2][6] = '┘';
+    }
+
+    public void symbolRemoveMarkActive() {
+        this.symbol[0][0] = ' ';
+        this.symbol[0][6] = ' ';
+        this.symbol[2][0] = ' ';
+        this.symbol[2][6] = ' ';
+    }
+
+    public void symbolAddMarkCanBeAttacked() {
+        this.symbol[0][0] = '┘';
+        this.symbol[0][6] = '└';
+        this.symbol[2][0] = '┐';
+        this.symbol[2][6] = '┌';
+    }
+
+    public void symbolRemoveMarkCanBeAttacked() {
+        this.symbol[0][0] = ' ';
+        this.symbol[0][6] = ' ';
+        this.symbol[2][0] = ' ';
+        this.symbol[2][6] = ' ';
+    }
+
+    public void symbolAddCurrentLives() {
+        for (int l = 2; l < 5; l++) {
+            if ((this.getLebenspunkte() + 2) > l) {
+                this.symbol[0][l] = '♥';
+            } else {
+                this.symbol[0][l] = ' ';
+            }
+        }
+    }
+
+    public void bewegen(final Point ziel) {
 
         if (this.bewegungMoeglich(ziel)) {
             Spiel.getSpielbrett().bewege(this.getPosition(), ziel);
@@ -42,7 +86,7 @@ public abstract class Figur extends Spielobjekt {
         return this.lebenspunkte;
     }
 
-    private void setLebenspunkte(final int lebenspunkte) {
+    public void setLebenspunkte(final int lebenspunkte) {
         this.lebenspunkte = lebenspunkte;
     }
 
@@ -62,9 +106,9 @@ public abstract class Figur extends Spielobjekt {
         this.angriffsRaster = angriffsRaster;
     }
 
-    private boolean bewegungMoeglichRaster(Point ziel) {
+    private boolean bewegungMoeglichRaster(final Point ziel) {
 
-        if (this.getBewegungsRaster().length > 0 && this.getBewegungsRaster()[0].length > 0) {
+        if ((this.getBewegungsRaster().length > 0) && (this.getBewegungsRaster()[0].length > 0)) {
 
             final int relativX = ziel.x - this.getPosition().x;
             final int relativY = ziel.y - this.getPosition().y;
@@ -72,10 +116,10 @@ public abstract class Figur extends Spielobjekt {
             final int bewegungsRasterStartY = this.getBewegungsRaster().length / 2;
             final int bewegungsRasterStartX = this.getBewegungsRaster()[0].length / 2;
 
-            if (bewegungsRasterStartY + relativY >= 0
-                    && bewegungsRasterStartY + relativY < this.getBewegungsRaster().length) {
-                if (bewegungsRasterStartX + relativX >= 0 && bewegungsRasterStartX
-                        + relativX < this.getBewegungsRaster()[bewegungsRasterStartY + relativY].length) {
+            if (((bewegungsRasterStartY + relativY) >= 0)
+                    && ((bewegungsRasterStartY + relativY) < this.getBewegungsRaster().length)) {
+                if (((bewegungsRasterStartX + relativX) >= 0) && ((bewegungsRasterStartX
+                        + relativX) < this.getBewegungsRaster()[bewegungsRasterStartY + relativY].length)) {
                     return this.getBewegungsRaster()[bewegungsRasterStartY + relativY][bewegungsRasterStartX
                             + relativX];
                 }
@@ -86,19 +130,19 @@ public abstract class Figur extends Spielobjekt {
         return false;
     }
 
-    protected boolean angriffMoeglichRaster(Point ziel) {
+    protected boolean angriffMoeglichRaster(final Point ziel) {
 
-        if (this.getAngriffsRaster().length > 0 && this.getAngriffsRaster()[0].length > 0) {
+        if ((this.getAngriffsRaster().length > 0) && (this.getAngriffsRaster()[0].length > 0)) {
 
             final int relativX = ziel.x - this.getPosition().x;
             final int relativY = ziel.y - this.getPosition().y;
             final int angriffsRasterStartY = this.getAngriffsRaster().length / 2;
             final int angriffsRasterStartX = this.getAngriffsRaster()[0].length / 2;
 
-            if (angriffsRasterStartY + relativY >= 0
-                    && angriffsRasterStartY + relativY < this.getAngriffsRaster().length) {
-                if (angriffsRasterStartX + relativX >= 0 && angriffsRasterStartX
-                        + relativX < this.getAngriffsRaster()[angriffsRasterStartY + relativY].length) {
+            if (((angriffsRasterStartY + relativY) >= 0)
+                    && ((angriffsRasterStartY + relativY) < this.getAngriffsRaster().length)) {
+                if (((angriffsRasterStartX + relativX) >= 0) && ((angriffsRasterStartX
+                        + relativX) < this.getAngriffsRaster()[angriffsRasterStartY + relativY].length)) {
                     return this.getAngriffsRaster()[angriffsRasterStartY + relativY][angriffsRasterStartX
                             + relativX];
                 }
@@ -108,37 +152,48 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (this.getClass() != obj.getClass()) {
             return false;
-        Figur other = (Figur) obj;
-        if (!Arrays.deepEquals(angriffsRaster, other.angriffsRaster))
+        }
+        final Figur other = (Figur) obj;
+        if (!Arrays.deepEquals(this.angriffsRaster, other.angriffsRaster)) {
             return false;
-        if (!Arrays.deepEquals(bewegungsRaster, other.bewegungsRaster))
+        }
+        if (!Arrays.deepEquals(this.bewegungsRaster, other.bewegungsRaster)) {
             return false;
-        if (istBewegt != other.istBewegt)
+        }
+        if (this.istBewegt != other.istBewegt) {
             return false;
-        if (lebenspunkte != other.lebenspunkte)
+        }
+        if (this.lebenspunkte != other.lebenspunkte) {
             return false;
-        if (name == null) {
-            if (other.name != null)
+        }
+        if (this.name == null) {
+            if (other.name != null) {
                 return false;
-        } else if (!name.equals(other.name))
+            }
+        } else if (!this.name.equals(other.name)) {
             return false;
-        if (team == null) {
-            if (other.team != null)
+        }
+        if (this.team == null) {
+            if (other.team != null) {
                 return false;
-        } else if (!team.equals(other.team))
+            }
+        } else if (!this.team.equals(other.team)) {
             return false;
+        }
         return true;
     }
 
     @Override
-    public boolean angriffMoeglich(Point ziel) {
+    public boolean angriffMoeglich(final Point ziel) {
 
         if (this.angriffMoeglichRaster(ziel)) {
             if (!Spiel.figurGreiftAn(this)) {
@@ -151,7 +206,7 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean istAngreifbar(Figur f) {
+    public boolean istAngreifbar(final Figur f) {
         if (this.getTeam() == f.getTeam()) {
             return false;
         } else {
@@ -160,7 +215,7 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean bewegungMoeglich(Point ziel) {
+    public boolean bewegungMoeglich(final Point ziel) {
 
         if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel)
                 && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel) && this.bewegungMoeglichRaster(ziel)
@@ -172,10 +227,10 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public Spieler getTeam() {
-        return team;
+        return this.team;
     }
 
-    public void setTeam(Spieler team) {
+    public void setTeam(final Spieler team) {
         this.team = team;
     }
 
@@ -188,24 +243,28 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public boolean istBewegt() {
-        return istBewegt;
+        return this.istBewegt;
     }
 
-    public void setIstBewegt(boolean istBewegt) {
+    public void setIstBewegt(final boolean istBewegt) {
         this.istBewegt = istBewegt;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     @SuppressWarnings("unused")
-    private void setName(String name) {
+    private void setName(final String name) {
         this.name = name;
     }
 
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public String printPosition() {
+        return String.format("%s%02d", String.valueOf((char) (this.getPosition().y + 'A')), this.getPosition().x + 1);
     }
 }

@@ -25,24 +25,26 @@ public final class Magier extends Figur {
             { true, true, false, false, false },
             { false, false, false, false, false }, };
 
-    private static boolean[][][] angriffsRasterArray = { angriffsRasterS1, angriffsRasterS2 };
+    private static boolean[][][] angriffsRasterArray = { Magier.angriffsRasterS1, Magier.angriffsRasterS2 };
 
-    private static char[][] symbol = { { 'M' } };
+    private static char symbol = 'M';
+    private static String name = "Magier";
 
     private static int lebenspunkte = 1;
 
-    public Magier(Spieler team) {
-        super("Magier", Magier.lebenspunkte, Magier.bewegungsRaster, Magier.angriffsRasterArray[team.getNummer() - 1],
+    public Magier(final Spieler team) {
+        super(Magier.name, Magier.lebenspunkte, Magier.bewegungsRaster,
+                Magier.angriffsRasterArray[team.getNummer() - 1],
                 Magier.symbol, team);
     }
 
     @Override
-    public boolean angriffMoeglich(Point ziel) {
+    public boolean angriffMoeglich(final Point ziel) {
 
         if (this.angriffMoeglichRaster(ziel)) {
             if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
                 if (Spiel.getKaempfe().size() > 0) {
-                    for (Kampf k : Spiel.getKaempfe()) {
+                    for (final Kampf k : Spiel.getKaempfe()) {
                         if (this.equals(k.getAngreifer())
                                 && (Spiel.getSpielbrett().getFeld(ziel).equals(k.getVerteidiger()))) {
                             return false;

@@ -5,55 +5,58 @@ import java.awt.Point;
 public class Spielobjekt {
 
     private Point position;
-    private char[][] symbol;
+    protected char[][] symbol = { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            { ' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            { ' ', ' ', ' ', ' ', ' ', ' ', ' ', } };
 
-    public Spielobjekt(final char[][] symbol) {
-        this.setSymbol(symbol);
-        this.setPosition(position);
+    public Spielobjekt(final char symbol) {
+        this.symbolAddInitial(symbol);
     }
 
-    public Spielobjekt(final String symbol) {
-        this.setSymbol(symbol);
-        this.setPosition(position);
+    @Override
+    public Spielobjekt clone() {
+        final Spielobjekt copy = new Spielobjekt(' ');
+        copy.setSymbol(this.symbol.clone());
+        copy.setPosition(new Point(this.getPosition().x, this.getPosition().y));
+        return copy;
+    }
+
+    private void symbolAddInitial(final char symbol) {
+        this.symbol[1][3] = symbol;
     }
 
     public char[][] getSymbol() {
         return this.symbol;
     }
 
-    private void setSymbol(final char[][] symbol) {
+    protected void setSymbol(final char[][] symbol) {
         this.symbol = symbol;
     }
 
-    private void setSymbol(final String symbol) {
-        this.symbol = new char[1][];
-        this.symbol[0] = symbol.toCharArray();
-    }
-
     public boolean isEmpty() {
-        if (this.symbol.length == 1 && this.symbol[0].length == 1 && this.symbol[0][0] == ' ') {
+        if (this.symbol[1][3] == ' ') {
             return true;
         }
         return false;
     }
 
     public Point getPosition() {
-        return position;
+        return this.position;
     }
 
-    public void setPosition(Point position) {
+    public void setPosition(final Point position) {
         this.position = position;
     }
 
-    public boolean bewegungMoeglich(Point ziel) {
+    public boolean bewegungMoeglich(final Point ziel) {
         return false;
     }
 
-    public boolean angriffMoeglich(Point ziel) {
+    public boolean angriffMoeglich(final Point ziel) {
         return false;
     }
 
-    public boolean istAngreifbar(Figur f) {
+    public boolean istAngreifbar(final Figur f) {
         return false;
     }
 }

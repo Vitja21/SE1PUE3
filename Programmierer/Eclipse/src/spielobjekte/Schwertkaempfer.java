@@ -8,13 +8,14 @@ public final class Schwertkaempfer extends Figur {
 
     private static boolean[][] angriffsRaster = { { true, true, true }, { true, false, true }, { true, true, true }, };
 
-    private static char[][] symbol = { { 'S' } };
+    private static char symbol = 'S';
+    private static String name = "Schwertkämpfer";
 
     private static int lebenspunkte = 3;
 
-    public Schwertkaempfer(Spieler team) {
-	super("Schwertkämpfer", Schwertkaempfer.lebenspunkte, Schwertkaempfer.bewegungsRaster,
-		Schwertkaempfer.angriffsRaster, Schwertkaempfer.symbol, team);
+    public Schwertkaempfer(final Spieler team) {
+        super(Schwertkaempfer.name, Schwertkaempfer.lebenspunkte, Schwertkaempfer.bewegungsRaster,
+                Schwertkaempfer.angriffsRaster, Schwertkaempfer.symbol, team);
     }
 
 }
