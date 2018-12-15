@@ -53,11 +53,11 @@ public class Spielobjekt {
     }
 
     public void symbolAddMarkMovementPossible() {
-        this.symbol[1][3] = '○';
+        this.symbol[1][3] = '.';
     }
 
     public void symbolRemoveMarkMovementPossible() {
-        if (this.symbol[1][3] == '○') {
+        if (this.symbol[1][3] == '.') {
             this.symbol[1][3] = ' ';
         }
     }

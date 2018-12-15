@@ -51,9 +51,9 @@ public abstract class Figur extends Spielobjekt {
         this.symbol[0][6] = '┐';
         this.symbol[2][0] = '└';
         this.symbol[2][6] = '┘';
-        this.symbol[1][0] = '►';
-        this.symbol[1][6] = '◄';
-        this.symbol[2][3] = '▲';
+        this.symbol[1][0] = '>';
+        this.symbol[1][6] = '<';
+        this.symbol[2][3] = '^';
     }
 
     public void symbolRemoveMarkCanBeAttacked() {
@@ -66,7 +66,7 @@ public abstract class Figur extends Spielobjekt {
     public void symbolAddCurrentLives() {
         for (int l = 2; l < 5; l++) {
             if ((this.getLebenspunkte() + 2) > l) {
-                this.symbol[0][l] = '♥';
+                this.symbol[0][l] = 'o';
             } else {
                 this.symbol[0][l] = ' ';
             }
