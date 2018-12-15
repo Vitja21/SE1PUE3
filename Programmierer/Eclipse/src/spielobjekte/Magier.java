@@ -1,8 +1,5 @@
 package spielobjekte;
 
-import java.awt.Point;
-
-import prototypen.Spiel;
 import spieler.Spieler;
 
 public final class Magier extends Figur {
@@ -36,26 +33,5 @@ public final class Magier extends Figur {
         super(Magier.name, Magier.lebenspunkte, Magier.bewegungsRaster,
                 Magier.angriffsRasterArray[team.getNummer() - 1],
                 Magier.symbol, team);
-    }
-
-    @Override
-    public boolean angriffMoeglich(final Point ziel) {
-
-        if (this.angriffMoeglichRaster(ziel)) {
-            if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
-                if (Spiel.getKaempfe().size() > 0) {
-                    for (final Kampf k : Spiel.getKaempfe()) {
-                        if (this.equals(k.getAngreifer())
-                                && (Spiel.getSpielbrett().getFeld(ziel).equals(k.getVerteidiger()))) {
-                            return false;
-                        }
-                    }
-                    return true;
-                } else {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

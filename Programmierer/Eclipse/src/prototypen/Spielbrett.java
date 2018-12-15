@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
+import spieler.Spieler;
 import spielobjekte.Figur;
 import spielobjekte.Hindernis;
 import spielobjekte.Spielobjekt;
@@ -30,14 +31,14 @@ public class Spielbrett {
     private Spielbrett() {
         this.generiereSpielbrettSpielobjektArray(10, 10);
         this.setHindernisse();
-        this.setFiguren(Spiel.getSpieler1().getHelden(), Spiel.getSpieler2().getHelden());
+        this.setFiguren(Spiel.getSpieler1(), Spiel.getSpieler2());
     }
 
     public Spielobjekt[][] copySpielobjekte() {
         final Spielobjekt[][] copySpielobjekte = new Spielobjekt[this.yLaenge][this.xLaenge];
         for (int y = 0; y < this.yLaenge; y++) {
             for (int x = 0; x < this.xLaenge; x++) {
-                copySpielobjekte[y][x] = this.spielobjekte[y][x];
+                copySpielobjekte[y][x] = this.getFeld(new Point(x, y));
             }
         }
         return copySpielobjekte;
@@ -47,35 +48,39 @@ public class Spielbrett {
 
         this.spielobjekte = new Spielobjekt[yLaenge][xLaenge];
 
+        this.setDimensionen();
+
         for (int y = 0; y < yLaenge; y++) {
             for (int x = 0; x < xLaenge; x++) {
-                this.spielobjekte[y][x] = new Spielobjekt(' ');
+                this.setFeld(new Point(x, y), new Spielobjekt(' '));
             }
         }
-        this.setDimensionen();
     }
 
-    private void setFiguren(final Figur[] heldenSpieler1, final Figur[] heldenSpieler2) {
+    private void setFiguren(final Spieler spieler1, final Spieler spieler2) {
 
         final ArrayList<Figur> gesetzteFiguren = new ArrayList<>();
 
+        final ArrayList<Figur> heldenSpieler1 = spieler1.getHelden();
+        final ArrayList<Figur> heldenSpieler2 = spieler2.getHelden();
+
         final Random randomGenerator = new Random();
         int index;
-        final int maxFiguren = heldenSpieler1.length + heldenSpieler2.length;
+        final int maxFiguren = heldenSpieler1.size() + heldenSpieler2.size();
 
         for (int y = 0; y < this.yLaenge; y++) {
             if ((y % 2) == 0) {
                 do {
-                    index = randomGenerator.nextInt(heldenSpieler1.length);
-                } while (gesetzteFiguren.contains(heldenSpieler1[index]) && (gesetzteFiguren.size() <= maxFiguren));
-                this.setFeld(new Point(0, y), heldenSpieler1[index]);
-                gesetzteFiguren.add(heldenSpieler1[index]);
+                    index = randomGenerator.nextInt(heldenSpieler1.size());
+                } while (gesetzteFiguren.contains(heldenSpieler1.get(index)) && (gesetzteFiguren.size() <= maxFiguren));
+                this.setFeld(new Point(0, y), heldenSpieler1.get(index));
+                gesetzteFiguren.add(heldenSpieler1.get(index));
             } else if ((y % 2) == 1) {
                 do {
-                    index = randomGenerator.nextInt(heldenSpieler2.length);
-                } while (gesetzteFiguren.contains(heldenSpieler2[index]) && (gesetzteFiguren.size() <= maxFiguren));
-                this.setFeld(new Point(9, y), heldenSpieler2[index]);
-                gesetzteFiguren.add(heldenSpieler2[index]);
+                    index = randomGenerator.nextInt(heldenSpieler2.size());
+                } while (gesetzteFiguren.contains(heldenSpieler2.get(index)) && (gesetzteFiguren.size() <= maxFiguren));
+                this.setFeld(new Point(9, y), heldenSpieler2.get(index));
+                gesetzteFiguren.add(heldenSpieler2.get(index));
             }
         }
     }
@@ -264,55 +269,19 @@ public class Spielbrett {
         }
     }
 
-    /*
-     * // TODO: Überarbeiten, soll das aktuell anzuzeigende Spielbrett mit dem
-     * // Bewegungsradius aktualisieren public void printBewegen(Point start,
-     * Spielobjekt[][] brettAktuell) {
-     *
-     * final char[][] rahmenChar = { { '┌', '─', '─', '─', '┐' }, { '│', ' ', '
-     * ', ' ', '│' }, { '└', '─', '─', '─', '┘' } }; final Spielobjekt rahmen =
-     * new Spielobjekt(rahmenChar);
-     *
-     * final Spielobjekt[][] originalSpielbrett = this.copySpielobjekte();
-     *
-     * Point ziel = new Point();
-     *
-     * for (int yZiel = 0; yZiel < this.yLaenge; yZiel++) {
-     *
-     * ziel.y = yZiel;
-     *
-     * for (int xZiel = 0; xZiel < this.xLaenge; xZiel++) {
-     *
-     * ziel.x = xZiel;
-     *
-     * if (this.getFeld(start).bewegungMoeglich(ziel)) { this.setFeld(ziel,
-     * rahmen); } } }
-     *
-     * Spiel.setNachrichtTemporaerKurz("");
-     *
-     * if (!(this.getFeld(start) instanceof Figur)) {
-     * Spiel.setNachrichtTemporaerKurz(
-     * "Bewegungsanzeige nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist."
-     * ); }
-     *
-     * Spiel.updateConsole(brettAktuell);
-     *
-     * this.spielobjekte = originalSpielbrett; }
-     */
-
-    public boolean bewegungMoeglichBelegt(final Point ziel) {
+    public boolean bewegungMoeglichBelegt(final Point ziel, final boolean setMessage) {
 
         final boolean moeglich = ((this.getFeld(ziel) == null) || this.getFeld(ziel).isEmpty());
-        if (!moeglich) {
+        if (!moeglich && setMessage) {
             Spiel.setNachrichtTemporaerKurz("Zug auf dieses Feld nicht moeglich. Bereits belegt.");
         }
         return moeglich;
     }
 
-    public boolean bewegungMoeglichSpielfeld(final Point start, final Point ziel) {
+    public boolean bewegungMoeglichSpielfeld(final Point start, final Point ziel, final boolean setMessage) {
 
         final boolean moeglich = (this.isInBounds(start) && this.isInBounds(ziel) && !start.equals(ziel));
-        if (!moeglich) {
+        if (!moeglich && setMessage) {
             Spiel.setNachrichtTemporaerKurz("Zug auf dieses Feld nicht moeglich. Außerhalb des Spielfeldes.");
         }
         return moeglich;
@@ -350,6 +319,8 @@ public class Spielbrett {
             for (int x = 0; x < this.xLaenge; x++) {
                 if (Figur.class.isInstance(this.getFeld(new Point(x, y)))
                         && ((Figur) (this.getFeld(new Point(x, y)))).istTot()) {
+                    ((Figur) (this.getFeld(new Point(x, y)))).getTeam()
+                            .entferneHeld((Figur) (this.getFeld(new Point(x, y))));
                     final Spielobjekt leeresObjekt = new Spielobjekt(' ');
                     this.setFeld(new Point(x, y), leeresObjekt);
                 }

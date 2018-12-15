@@ -17,5 +17,4 @@ public final class Schwertkaempfer extends Figur {
         super(Schwertkaempfer.name, Schwertkaempfer.lebenspunkte, Schwertkaempfer.bewegungsRaster,
                 Schwertkaempfer.angriffsRaster, Schwertkaempfer.symbol, team);
     }
-
 }

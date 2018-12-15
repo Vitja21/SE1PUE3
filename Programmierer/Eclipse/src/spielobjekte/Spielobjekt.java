@@ -13,14 +13,6 @@ public class Spielobjekt {
         this.symbolAddInitial(symbol);
     }
 
-    @Override
-    public Spielobjekt clone() {
-        final Spielobjekt copy = new Spielobjekt(' ');
-        copy.setSymbol(this.symbol.clone());
-        copy.setPosition(new Point(this.getPosition().x, this.getPosition().y));
-        return copy;
-    }
-
     private void symbolAddInitial(final char symbol) {
         this.symbol[1][3] = symbol;
     }
@@ -48,7 +40,7 @@ public class Spielobjekt {
         this.position = position;
     }
 
-    public boolean bewegungMoeglich(final Point ziel) {
+    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
         return false;
     }
 
@@ -58,5 +50,15 @@ public class Spielobjekt {
 
     public boolean istAngreifbar(final Figur f) {
         return false;
+    }
+
+    public void symbolAddMarkMovementPossible() {
+        this.symbol[1][3] = '○';
+    }
+
+    public void symbolRemoveMarkMovementPossible() {
+        if (this.symbol[1][3] == '○') {
+            this.symbol[1][3] = ' ';
+        }
     }
 }

@@ -79,7 +79,7 @@ public class Kampf {
                                 if (k2.getAngriffsart().equals("stein")) {
                                     k1.getAngreifer().setLebenspunkte(k1.getAngreifer().getLebenspunkte() - 1);
                                     k1.getAngreifer().symbolAddCurrentLives();
-                                    ergebnis += String.format("%s verliert.", k1.getAngreifer().printPosition());
+                                    ergebnis += String.format("%s gewinnt.", k2.getAngreifer().printPosition());
                                 } else {
                                     k2.getAngreifer().setLebenspunkte(k2.getAngreifer().getLebenspunkte() - 1);
                                     k2.getAngreifer().symbolAddCurrentLives();
@@ -90,7 +90,7 @@ public class Kampf {
                                 if (k2.getAngriffsart().equals("papier")) {
                                     k1.getAngreifer().setLebenspunkte(k1.getAngreifer().getLebenspunkte() - 1);
                                     k1.getAngreifer().symbolAddCurrentLives();
-                                    ergebnis += String.format("%s verliert.", k1.getAngreifer().printPosition());
+                                    ergebnis += String.format("%s gewinnt.", k2.getAngreifer().printPosition());
                                 } else {
                                     k2.getAngreifer().setLebenspunkte(k2.getAngreifer().getLebenspunkte() - 1);
                                     k2.getAngreifer().symbolAddCurrentLives();
@@ -101,7 +101,7 @@ public class Kampf {
                                 if (k2.getAngriffsart().equals("schere")) {
                                     k1.getAngreifer().setLebenspunkte(k1.getAngreifer().getLebenspunkte() - 1);
                                     k1.getAngreifer().symbolAddCurrentLives();
-                                    ergebnis += String.format("%s verliert.", k1.getAngreifer().printPosition());
+                                    ergebnis += String.format("%s gewinnt.", k2.getAngreifer().printPosition());
                                 } else {
                                     k2.getAngreifer().setLebenspunkte(k2.getAngreifer().getLebenspunkte() - 1);
                                     k2.getAngreifer().symbolAddCurrentLives();

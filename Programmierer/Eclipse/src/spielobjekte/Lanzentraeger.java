@@ -20,5 +20,4 @@ public final class Lanzentraeger extends Figur {
                 Lanzentraeger.angriffsRaster,
                 Lanzentraeger.symbol, team);
     }
-
 }

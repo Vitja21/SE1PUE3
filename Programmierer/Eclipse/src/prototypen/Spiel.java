@@ -164,17 +164,16 @@ public class Spiel {
             Spiel.angriffsphase(in, Spiel.spieler1);
             Spiel.angriffsphase(in, Spiel.spieler2);
 
-            if (Spiel.kaempfe.size() > 0) {
-                Spiel.kampfphase();
-                System.out.println("Drücken Sie Enter um den Kampfbericht zu verlassen.");
-                in.nextLine();
-            }
+            Spiel.kampfphase(in);
+
         }
     }
 
     private static void setupBewegungsphase() {
+
         Spiel.setNachrichtTemporaerLang("Spieler 1 Bewegungsphase\n");
         Spiel.setNachrichtTemporaerKurz("Erwarte Eingabe [warten/Figur Position - Ziel Position]");
+
         for (final Figur f : Spiel.spieler1.getHelden()) {
             f.setIstBewegt(false);
         }
@@ -186,10 +185,13 @@ public class Spiel {
 
     private static void bewegungsphase(final Scanner in, final Spieler spieler, final Spielobjekt[][] brettAlt) {
 
-        while (spieler.hatNochNichtBewegteFiguren()) {
+        Spiel.addMovementMarks(brettAlt, spieler);
+
+        while (spieler.hatNochNichtBewegteFiguren(brettAlt)) {
 
             Spiel.setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
-            Spiel.setNachrichtTemporaerKurz("Erwarte Eingabe [warten / Figur Position - Ziel Position]");
+
+            Spiel.updateConsole(brettAlt);
 
             final String eingabe = in.nextLine();
 
@@ -198,9 +200,23 @@ public class Spiel {
             } else {
                 Spiel.bewegungBefehleInterpretieren(eingabe, spieler, brettAlt);
             }
+
+            for (int y = 0; y < brettAlt.length; y++) {
+                for (int x = 0; x < brettAlt.length; x++) {
+                    if (Figur.class.isInstance(brettAlt[y][x])) {
+                        ((Figur) (brettAlt[y][x])).symbolRemoveMarkActive();
+                        ((Figur) (brettAlt[y][x])).symbolRemoveMarkCanBeAttacked();
+                    }
+                }
+            }
         }
-        Spiel.bewegungsphaseSpielerAnzeige(spieler);
-        Spiel.updateConsole(brettAlt);
+
+        for (int y = 0; y < brettAlt.length; y++) {
+            for (int x = 0; x < brettAlt.length; x++) {
+                brettAlt[y][x].symbolRemoveMarkMovementPossible();
+            }
+        }
+        Spiel.setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
     }
 
     private static void warten(final Spieler spieler, final Spielobjekt[][] brettAlt) {
@@ -208,17 +224,6 @@ public class Spiel {
             f.setIstBewegt(true);
         }
         Spiel.setNachrichtTemporaerKurz("Spieler " + spieler.getNummer() + " beendet seine Bewegung.");
-    }
-
-    private static void bewegungsphaseSpielerAnzeige(final Spieler spieler) {
-        int nummer;
-        if (spieler.getNummer() == 1) {
-            nummer = 2;
-        } else {
-            nummer = 1;
-        }
-
-        Spiel.setNachrichtTemporaerLang("Spieler " + nummer + ": Bewegungsphase\n");
     }
 
     public static void bewegungBefehleInterpretieren(String eingabe, final Spieler spieler,
@@ -254,12 +259,13 @@ public class Spiel {
                         "Bewegung nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
             }
 
-            if (Spiel.spielbrett.getFeld(start).bewegungMoeglich(ziel)) {
+            if (Spiel.spielbrett.getFeld(start).bewegungMoeglich(ziel, true)) {
 
                 if (!((Figur) Spiel.spielbrett.getFeld(start)).istBewegt()) {
 
                     if (((Figur) Spiel.spielbrett.getFeld(start)).getTeam().equals(spieler)) {
                         ((Figur) Spiel.spielbrett.getFeld(start)).bewegen(ziel);
+                        Spiel.setNachrichtTemporaerKurz("Erwarte Eingabe [warten/Figur Position - Ziel Position]");
                     } else {
                         Spiel.setNachrichtTemporaerKurz("Zug nicht möglich, da ausgewähltes Figur nicht Spieler "
                                 + spieler.getNummer() + " gehört.");
@@ -270,10 +276,9 @@ public class Spiel {
                 }
             }
         } else {
-            // TODO:
-            // spielbrett.printBewegen(start, brettAktuell);
+            Spiel.setNachrichtTemporaerKurz(
+                    "Zug nicht möglich, die eingegebenen Koordinaten waren nicht korrekt.");
         }
-        Spiel.updateConsole(brettAlt);
     }
 
     private static void angriffsphase(final Scanner in, final Spieler spieler) {
@@ -281,18 +286,43 @@ public class Spiel {
         Spiel.setNachrichtTemporaerLang(String.format("Spieler %d: Angriffssphase%n", spieler.getNummer()));
         Spiel.setNachrichtTemporaerKurz(
                 "Erwartete Eingabe: [Startkoordinaten, Zielkoordinaten, Schere/Stein/Papier]: ");
-        Spiel.updateConsole(Spiel.getSpielbrett().copySpielobjekte());
 
         while (Spiel.hatOffeneAngriffsMoeglichkeiten(spieler)) {
+
             Spiel.updateConsole(Spiel.getSpielbrett().copySpielobjekte());
+
             final String eingabe = in.nextLine();
             Spiel.angriffsBefehleInterpretieren(eingabe, spieler);
-
-            for (final Figur f : spieler.getHelden()) {
-                f.symbolRemoveMarkActive();
-            }
+            Spiel.removeSymbolMarks();
         }
 
+    }
+
+    private static void removeSymbolMarks() {
+
+        for (int y = 0; y < Spiel.getSpielbrett().getYLaenge(); y++) {
+            for (int x = 0; x < Spiel.getSpielbrett().getXLaenge(); x++) {
+                if (Figur.class.isInstance(Spiel.getSpielbrett().getFeld(new Point(x, y)))) {
+                    ((Figur) (Spiel.getSpielbrett().getFeld(new Point(x, y)))).symbolRemoveMarkActive();
+                    ((Figur) (Spiel.getSpielbrett().getFeld(new Point(x, y)))).symbolRemoveMarkCanBeAttacked();
+                }
+            }
+        }
+    }
+
+    private static void addMovementMarks(final Spielobjekt[][] brettAlt, final Spieler spieler) {
+        for (final Figur f : spieler.getHelden()) {
+            if (!f.istBewegt()) {
+                ((Figur) (brettAlt[f.getPosition().y][f.getPosition().x])).symbolAddMarkActive();
+                for (int y = 0; y < brettAlt.length; y++) {
+                    for (int x = 0; x < brettAlt[y].length; x++) {
+                        if (f.bewegungMoeglich(new Point(x, y), false)) {
+                            brettAlt[y][x].symbolAddMarkMovementPossible();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private static boolean hatOffeneAngriffsMoeglichkeiten(final Spieler spieler) {
@@ -315,19 +345,24 @@ public class Spiel {
         return hatNoch;
     }
 
-    private static void kampfphase() {
-        // Kämpfe austragen, der Printline hinzufügen, Tote entfernen,
-        // Spielbrett anzeigen.
-        Spiel.setNachrichtTemporaerKurz("");
-        // Gegenseitiges Angreifen
-        Kampf.kaempfen(Spiel.kaempfe);
-        Spiel.kaempfe.clear();
+    private static void kampfphase(final Scanner in) {
+        if (Spiel.kaempfe.size() > 0) {
+            // Kämpfe austragen, der Printline hinzufügen, Tote entfernen,
+            // Spielbrett anzeigen.
+            Spiel.setNachrichtTemporaerKurz("");
+            // Gegenseitiges Angreifen
+            Kampf.kaempfen(Spiel.kaempfe);
+            Spiel.kaempfe.clear();
 
-        Spiel.setNachrichtTemporaerLang(String.format("Ausgetragene Kämpfe:%n"));
+            Spiel.setNachrichtTemporaerLang(String.format("Ausgetragene Kämpfe:%n"));
 
-        Spiel.getSpielbrett().toteEntfernen();
+            Spiel.getSpielbrett().toteEntfernen();
 
-        Spiel.updateConsole(Spiel.spielbrett.copySpielobjekte());
+            Spiel.updateConsole(Spiel.spielbrett.copySpielobjekte());
+
+            System.out.println("Drücken Sie Enter um den Kampfbericht zu verlassen.");
+            in.nextLine();
+        }
     }
 
     public static void angriffsBefehleInterpretieren(String eingabe, final Spieler spieler) {

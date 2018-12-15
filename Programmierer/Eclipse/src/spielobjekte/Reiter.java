@@ -1,5 +1,7 @@
 package spielobjekte;
 
+import java.awt.Point;
+
 import spieler.Spieler;
 
 public final class Reiter extends Figur {
@@ -20,4 +22,15 @@ public final class Reiter extends Figur {
         super(Reiter.name, Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol, team);
     }
 
+    @Override
+    /**
+     * Bewegungsbeschränkung für Reiter.
+     */
+    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+
+        // TODO: Bewegungsbeschränking für Reiter.
+
+        return super.bewegungMoeglich(ziel, setMessage);
+
+    }
 }

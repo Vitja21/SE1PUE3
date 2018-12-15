@@ -14,7 +14,7 @@ public abstract class Figur extends Spielobjekt {
     private Spieler team;
     private boolean[][] bewegungsRaster;
     private boolean[][] angriffsRaster;
-    private boolean istBewegt = false;
+    protected boolean istBewegt = false;
 
     public Figur(final String name, final int lebenspunkte, final boolean[][] bewegungsRaster,
             final boolean[][] angriffsRaster, final char symbol, final Spieler team) {
@@ -33,10 +33,10 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public void symbolAddMarkActive() {
-        this.symbol[0][0] = '┌';
-        this.symbol[0][6] = '┐';
-        this.symbol[2][0] = '└';
-        this.symbol[2][6] = '┘';
+        this.symbol[0][0] = '╔';
+        this.symbol[0][6] = '╗';
+        this.symbol[2][0] = '╚';
+        this.symbol[2][6] = '╝';
     }
 
     public void symbolRemoveMarkActive() {
@@ -47,17 +47,20 @@ public abstract class Figur extends Spielobjekt {
     }
 
     public void symbolAddMarkCanBeAttacked() {
-        this.symbol[0][0] = '┘';
-        this.symbol[0][6] = '└';
-        this.symbol[2][0] = '┐';
-        this.symbol[2][6] = '┌';
+        this.symbol[0][0] = '┌';
+        this.symbol[0][6] = '┐';
+        this.symbol[2][0] = '└';
+        this.symbol[2][6] = '┘';
+        this.symbol[1][0] = '►';
+        this.symbol[1][6] = '◄';
+        this.symbol[2][3] = '▲';
     }
 
     public void symbolRemoveMarkCanBeAttacked() {
-        this.symbol[0][0] = ' ';
-        this.symbol[0][6] = ' ';
-        this.symbol[2][0] = ' ';
-        this.symbol[2][6] = ' ';
+        this.symbolRemoveMarkActive();
+        this.symbol[1][0] = ' ';
+        this.symbol[1][6] = ' ';
+        this.symbol[2][3] = ' ';
     }
 
     public void symbolAddCurrentLives() {
@@ -72,7 +75,7 @@ public abstract class Figur extends Spielobjekt {
 
     public void bewegen(final Point ziel) {
 
-        if (this.bewegungMoeglich(ziel)) {
+        if (this.bewegungMoeglich(ziel, true)) {
             Spiel.getSpielbrett().bewege(this.getPosition(), ziel);
             this.istBewegt = true;
         }
@@ -106,7 +109,7 @@ public abstract class Figur extends Spielobjekt {
         this.angriffsRaster = angriffsRaster;
     }
 
-    private boolean bewegungMoeglichRaster(final Point ziel) {
+    protected boolean bewegungMoeglichRaster(final Point ziel, final boolean setMessage) {
 
         if ((this.getBewegungsRaster().length > 0) && (this.getBewegungsRaster()[0].length > 0)) {
 
@@ -126,7 +129,9 @@ public abstract class Figur extends Spielobjekt {
             }
         }
 
-        Spiel.setNachrichtTemporaerKurz("Zug auf dieses Feld nicht moeglich. Auserhalb der Reichweite.");
+        if (setMessage) {
+            Spiel.setNachrichtTemporaerKurz("Zug auf dieses Feld nicht moeglich. Auserhalb der Reichweite.");
+        }
         return false;
     }
 
@@ -196,8 +201,16 @@ public abstract class Figur extends Spielobjekt {
     public boolean angriffMoeglich(final Point ziel) {
 
         if (this.angriffMoeglichRaster(ziel)) {
-            if (!Spiel.figurGreiftAn(this)) {
-                if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
+            if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
+                if (Spiel.getKaempfe().size() > 0) {
+                    for (final Kampf k : Spiel.getKaempfe()) {
+                        if (this.equals(k.getAngreifer())
+                                && (Spiel.getSpielbrett().getFeld(ziel).equals(k.getVerteidiger()))) {
+                            return false;
+                        }
+                    }
+                    return true;
+                } else {
                     return true;
                 }
             }
@@ -215,10 +228,11 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean bewegungMoeglich(final Point ziel) {
+    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
 
-        if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel)
-                && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel) && this.bewegungMoeglichRaster(ziel)
+        if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
+                && this.bewegungMoeglichRaster(ziel, setMessage)
                 && !this.istBewegt) {
             return true;
         } else {
