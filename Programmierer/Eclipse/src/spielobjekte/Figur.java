@@ -204,8 +204,7 @@ public abstract class Figur extends Spielobjekt {
             if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
                 if (Spiel.getKaempfe().size() > 0) {
                     for (final Kampf k : Spiel.getKaempfe()) {
-                        if (this.equals(k.getAngreifer())
-                                && (Spiel.getSpielbrett().getFeld(ziel).equals(k.getVerteidiger()))) {
+                        if (this.equals(k.getAngreifer())) {
                             return false;
                         }
                     }

@@ -33,7 +33,7 @@ public class Spiel {
     // erster index für phasenanzeigen, zweiter für fehlermeldungen, dritter für
     // meldungen wie 'Reiter wartet'
     private static String[] nachricht = { "", "" };
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     private static final Map<String, KI> schwierigkeitsgrade = new HashMap<>();
 
