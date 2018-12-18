@@ -2,6 +2,7 @@ package spieler;
 
 import java.util.List;
 
+import prototypen.Spiel;
 import spielobjekte.Figur;
 
 public class Team1 {
@@ -72,7 +73,40 @@ public class Team1 {
 	 * 
 	 */
 
-	return null; // 10x10 char-Array
+	char[][] spielfeld = new char[10][10];
+
+	for (int i = 0; i < 10; i++) {
+	    for (int k = 0; k < 10; k++) {
+		char symbol;
+		switch (Spiel.getSpielbrett().copySpielobjekte()[i][k].getClass().getName()) {
+		case "Bogenschuetze":
+		    symbol = 'B';
+		    break;
+		case "Lanzenträger":
+		    symbol = 'L';
+		    break;
+		case "Magier":
+		    symbol = 'M';
+		    break;
+		case "Reiter":
+		    symbol = 'R';
+		    break;
+		case "Schwertkämpfer":
+		    symbol = 'S';
+		    break;
+		case "Hindernis":
+		    symbol = '#';
+		    break;
+		default:
+		    symbol = ' ';
+		    break;
+		}
+
+		spielfeld[i][k] = symbol;
+	    }
+	}
+
+	return spielfeld; // 10x10 char-Array
     }
 
     List<Figur> gegner() {
