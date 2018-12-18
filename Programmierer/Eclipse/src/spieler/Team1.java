@@ -1,5 +1,9 @@
 package spieler;
 
+import java.util.List;
+
+import spielobjekte.Figur;
+
 public class Team1 {
 
     void firstPlayer() {
@@ -55,6 +59,27 @@ public class Team1 {
     }
 
     String whoIsTheLooser(String ko1, String ko2) {
+	return null;
+    }
+
+    char[][] getSpielfeld() {
+
+	/*
+	 * Symbole:
+	 * 
+	 * B - Bogenschütze L - Lanzenträger M - Magier R - Reiter S - Schwertkämpfer #
+	 * - Hindernis
+	 * 
+	 */
+
+	return null; // 10x10 char-Array
+    }
+
+    List<Figur> gegner() {
+	return null;
+    }
+
+    String getGegnerClass(String cord) {
 	return null;
     }
 
