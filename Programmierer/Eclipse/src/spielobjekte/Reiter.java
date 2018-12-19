@@ -25,18 +25,28 @@ public final class Reiter extends Figur {
     }
 
     @Override
-    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Point ziel, final boolean figurenZaehlen, final boolean setMessage) {
 
-        if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
-                && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
-                && this.bewegungMoeglichRaster(ziel, setMessage)
-                && !this.istBewegt
-                && this.keinHindernisAufWeg(ziel)) {
-
-            return true;
+        if (figurenZaehlen) {
+            if (!this.istBewegt(setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)
+                    && this.keinHindernisAufWeg(ziel)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-
-            return false;
+            if (!this.istBewegt(setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && !(Spielbrett.getInstance().getFeld(ziel) instanceof Hindernis)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)
+                    && this.keinHindernisAufWeg(ziel)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

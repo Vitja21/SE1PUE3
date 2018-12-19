@@ -75,7 +75,7 @@ public abstract class Figur extends Spielobjekt {
 
     public void bewegen(final Point ziel) {
 
-        if (this.bewegungMoeglich(ziel, true)) {
+        if (this.bewegungMoeglich(ziel, true, true)) {
             Spiel.getSpielbrett().bewege(this.getPosition(), ziel);
             this.istBewegt = true;
         }
@@ -227,15 +227,26 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Point ziel, final boolean figurenZaehlen, final boolean setMessage) {
 
-        if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
-                && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
-                && this.bewegungMoeglichRaster(ziel, setMessage)
-                && !this.istBewegt) {
-            return true;
+        if (figurenZaehlen) {
+            if (!this.istBewegt(setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            if (!this.istBewegt(setMessage)
+                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && !(Spielbrett.getInstance().getFeld(ziel) instanceof Hindernis)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -255,7 +266,10 @@ public abstract class Figur extends Spielobjekt {
         }
     }
 
-    public boolean istBewegt() {
+    public boolean istBewegt(final boolean setMessage) {
+        if (!this.istBewegt && setMessage) {
+            Spiel.setNachrichtTemporaerKurz("Bewegung nicht möglich: Figur wurde bereits bewegt.");
+        }
         return this.istBewegt;
     }
 

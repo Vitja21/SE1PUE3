@@ -76,7 +76,7 @@ public class Spiel {
             Spiel.spieler2 = new Mensch(2);
         }
 
-        Spiel.spielbrett = Spielbrett.getInstance();
+        Spiel.setSpielbrett(Spielbrett.getInstance());
     }
 
     /**
@@ -153,13 +153,13 @@ public class Spiel {
         while (!Spiel.spielZuEnde()) {
             Spiel.kaempfe = new ArrayList<>();
 
-            final Spielobjekt[][] brettAlt = Spiel.spielbrett.copySpielobjekte();
+            final Spielobjekt[][] brettAlt = Spiel.getSpielbrett().copySpielobjekte();
 
             Spiel.setupBewegungsphase();
             Spiel.bewegungsphase(in, Spiel.spieler1, brettAlt);
             Spiel.bewegungsphase(in, Spiel.spieler2, brettAlt);
 
-            Spiel.updateConsole(Spiel.spielbrett.copySpielobjekte());
+            Spiel.updateConsole(Spiel.getSpielbrett().copySpielobjekte());
 
             Spiel.angriffsphase(in, Spiel.spieler1);
             Spiel.angriffsphase(in, Spiel.spieler2);
@@ -171,59 +171,60 @@ public class Spiel {
 
     private static void setupBewegungsphase() {
 
-        Spiel.setNachrichtTemporaerLang("Spieler 1 Bewegungsphase\n");
-        Spiel.setNachrichtTemporaerKurz("Erwarte Eingabe [warten/Figur Position - Ziel Position]");
-
         for (final Figur f : Spiel.spieler1.getHelden()) {
             f.setIstBewegt(false);
         }
         for (final Figur f : Spiel.spieler2.getHelden()) {
             f.setIstBewegt(false);
         }
-        Spiel.updateConsole(Spiel.spielbrett.copySpielobjekte());
+        Spiel.updateConsole(Spiel.getSpielbrett().copySpielobjekte());
     }
 
     private static void bewegungsphase(final Scanner in, final Spieler spieler, final Spielobjekt[][] brettAlt) {
 
         Spiel.addMovementMarks(brettAlt, spieler);
+        Spiel.setNachrichtTemporaerLang(
+                String.format("Spieler %d: Bewegungsphase - Erwarte Eingabe [warten/Figur Position - Ziel Position]%n",
+                        spieler.getNummer()));
 
         while (spieler.hatNochNichtBewegteFiguren(brettAlt)) {
 
-            Spiel.setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
-
             Spiel.updateConsole(brettAlt);
-
-            final String eingabe = in.nextLine();
-
-            if (eingabe.contains("warte")) {
-                Spiel.warten(spieler, brettAlt);
-            } else {
-                Spiel.bewegen(Spiel.bewegungBefehleInterpretieren(eingabe, spieler, brettAlt), spieler);
-            }
-
             for (int y = 0; y < brettAlt.length; y++) {
                 for (int x = 0; x < brettAlt.length; x++) {
                     if (Figur.class.isInstance(brettAlt[y][x])) {
                         ((Figur) (brettAlt[y][x])).symbolRemoveMarkActive();
                         ((Figur) (brettAlt[y][x])).symbolRemoveMarkCanBeAttacked();
                     }
+                    if (brettAlt[y][x].getSymbol()[1][3] == '+') {
+                        brettAlt[y][x].symbolRemoveMarkMovementPossibleFigur();
+                    }
                 }
             }
+            final String eingabe = in.nextLine();
+
+            if (eingabe.contains("warte")) {
+                Spiel.warten(spieler, brettAlt);
+            } else {
+                Spiel.bewegen(brettAlt, Spiel.bewegungBefehleInterpretieren(eingabe, spieler, brettAlt), spieler);
+            }
+
         }
 
         for (int y = 0; y < brettAlt.length; y++) {
             for (int x = 0; x < brettAlt.length; x++) {
-                brettAlt[y][x].symbolRemoveMarkMovementPossible();
+                if (brettAlt[y][x].getSymbol()[1][3] == '+') {
+                    brettAlt[y][x].symbolRemoveMarkMovementPossible();
+                }
             }
         }
-        Spiel.setNachrichtTemporaerLang("Spieler " + spieler.getNummer() + ": Bewegungsphase\n");
     }
 
     private static void warten(final Spieler spieler, final Spielobjekt[][] brettAlt) {
         for (final Figur f : spieler.getHelden()) {
             f.setIstBewegt(true);
         }
-        Spiel.setNachrichtTemporaerKurz("Spieler " + spieler.getNummer() + " beendet seine Bewegung.");
+        Spiel.setNachrichtTemporaerKurz(String.format("Spieler %d beendet seine Bewegung.", spieler.getNummer()));
     }
 
     public static int[] bewegungBefehleInterpretieren(String eingabe, final Spieler spieler,
@@ -253,32 +254,33 @@ public class Spiel {
 
     }
 
-    private static void bewegen(final int[] eingabeInt, final Spieler spieler) {
+    private static void bewegen(final Spielobjekt[][] brettAlt, final int[] eingabeInt, final Spieler spieler) {
         final Point start = new Point(eingabeInt[0], eingabeInt[1]);
         final Point ziel = new Point(eingabeInt[2], eingabeInt[3]);
 
-        if ((start.x >= 0) && (start.y >= 0) && (ziel.x >= 0) && (ziel.y >= 0)) {
-
-            if (!(Spiel.spielbrett.getFeld(start) instanceof Figur)) {
-                Spiel.setNachrichtTemporaerKurz(
-                        "Bewegung nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
-            }
-
-            if (Spiel.spielbrett.getFeld(start).bewegungMoeglich(ziel, true)) {
-
-                if (!((Figur) Spiel.spielbrett.getFeld(start)).istBewegt()) {
-
-                    if (((Figur) Spiel.spielbrett.getFeld(start)).getTeam().equals(spieler)) {
-                        ((Figur) Spiel.spielbrett.getFeld(start)).bewegen(ziel);
-                        Spiel.setNachrichtTemporaerKurz("Erwarte Eingabe [warten/Figur Position - Ziel Position]");
+        // Start und Ziel Punkt sind auf dem Spielbrett
+        if (Spiel.getSpielbrett().isInBounds(start) && Spiel.getSpielbrett().isInBounds(ziel)) {
+            // Start ist eine Figur
+            if ((Spiel.getSpielbrett().getFeld(start) instanceof Figur)) {
+                // Figur kann sich nach Ziel bewegen
+                if (Spiel.getSpielbrett().getFeld(start).bewegungMoeglich(ziel, true, true)) {
+                    // Figur gehört Spieler
+                    if (((Figur) Spiel.getSpielbrett().getFeld(start)).getTeam().equals(spieler)) {
+                        // Bewege Figur
+                        ((Figur) Spiel.getSpielbrett().getFeld(start)).bewegen(ziel);
+                        Spiel.setNachrichtTemporaerKurz("");
                     } else {
                         Spiel.setNachrichtTemporaerKurz("Zug nicht möglich, da ausgewähltes Figur nicht Spieler "
                                 + spieler.getNummer() + " gehört.");
                     }
-                } else {
-                    Spiel.setNachrichtTemporaerKurz(
-                            "Zug nicht möglich, da ausgewähltes Figur diese Runde bereits bewegt wurde.");
                 }
+            } else {
+                Spiel.setNachrichtTemporaerKurz(
+                        "Bewegung nicht möglich, da ausgewähltes Objekt keine bewegbare Spielfigur ist.");
+            }
+        } else if (Spiel.getSpielbrett().isInBounds(start)) {
+            if ((Spiel.getSpielbrett().getFeld(start) instanceof Figur)) {
+                Spiel.addMovementMarksFigur(brettAlt, (Figur) (Spiel.getSpielbrett().getFeld(start)));
             }
         } else {
             Spiel.setNachrichtTemporaerKurz("Zug nicht möglich, die eingegebenen Koordinaten waren nicht korrekt.");
@@ -287,9 +289,9 @@ public class Spiel {
 
     private static void angriffsphase(final Scanner in, final Spieler spieler) {
 
-        Spiel.setNachrichtTemporaerLang(String.format("Spieler %d: Angriffssphase%n", spieler.getNummer()));
-        Spiel.setNachrichtTemporaerKurz(
-                "Erwartete Eingabe: [Startkoordinaten, Zielkoordinaten, Schere/Stein/Papier]: ");
+        Spiel.setNachrichtTemporaerLang(String.format(
+                "Spieler %d: Angriffssphase - Erwartete Eingabe: [Startkoordinaten, Zielkoordinaten, Schere/Stein/Papier]:%n",
+                spieler.getNummer()));
 
         while (Spiel.hatOffeneAngriffsMoeglichkeiten(spieler)) {
 
@@ -316,13 +318,27 @@ public class Spiel {
 
     private static void addMovementMarks(final Spielobjekt[][] brettAlt, final Spieler spieler) {
         for (final Figur f : spieler.getHelden()) {
-            if (!f.istBewegt()) {
+            if (!f.istBewegt(false)) {
                 ((Figur) (brettAlt[f.getPosition().y][f.getPosition().x])).symbolAddMarkActive();
                 for (int y = 0; y < brettAlt.length; y++) {
                     for (int x = 0; x < brettAlt[y].length; x++) {
-                        if (f.bewegungMoeglich(new Point(x, y), false) && brettAlt[y][x].isEmpty()) {
+                        if (f.bewegungMoeglich(new Point(x, y), false, false) && brettAlt[y][x].isEmpty()) {
                             brettAlt[y][x].symbolAddMarkMovementPossible();
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    private static void addMovementMarksFigur(final Spielobjekt[][] brettAlt, final Figur f) {
+        if (!f.istBewegt(false)) {
+            ((Figur) (brettAlt[f.getPosition().y][f.getPosition().x])).symbolAddMarkActive();
+            for (int y = 0; y < brettAlt.length; y++) {
+                for (int x = 0; x < brettAlt[y].length; x++) {
+                    if (f.bewegungMoeglich(new Point(x, y), false, false)
+                            && (brettAlt[y][x].getSymbol()[1][3] == '+')) {
+                        brettAlt[y][x].symbolAddMarkMovementPossibleFigur();
                     }
                 }
             }
@@ -334,11 +350,11 @@ public class Spiel {
         boolean hatNoch = false;
 
         for (final Figur f : spieler.getHelden()) {
-            for (int yZiel = 0; yZiel < Spiel.spielbrett.getYLaenge(); yZiel++) {
-                for (int xZiel = 0; xZiel < Spiel.spielbrett.getXLaenge(); xZiel++) {
+            for (int yZiel = 0; yZiel < Spiel.getSpielbrett().getYLaenge(); yZiel++) {
+                for (int xZiel = 0; xZiel < Spiel.getSpielbrett().getXLaenge(); xZiel++) {
                     // TODO: Abfrage, ob Kampf bereits stattfindet.
                     if (f.angriffMoeglich(new Point(xZiel, yZiel))) {
-                        ((Figur) (Spiel.spielbrett.getFeld(new Point(xZiel, yZiel)))).symbolAddMarkCanBeAttacked();
+                        ((Figur) (Spiel.getSpielbrett().getFeld(new Point(xZiel, yZiel)))).symbolAddMarkCanBeAttacked();
                         f.symbolAddMarkActive();
                         hatNoch = true;
                     }
@@ -362,7 +378,7 @@ public class Spiel {
 
             Spiel.getSpielbrett().toteEntfernen();
 
-            Spiel.updateConsole(Spiel.spielbrett.copySpielobjekte());
+            Spiel.updateConsole(Spiel.getSpielbrett().copySpielobjekte());
 
             System.out.println("Drücken Sie Enter um den Kampfbericht zu verlassen.");
             in.nextLine();
@@ -399,21 +415,22 @@ public class Spiel {
         final Point start = new Point(eingabeInt[0], eingabeInt[1]);
         final Point ziel = new Point(eingabeInt[2], eingabeInt[3]);
 
-        // Start und Ziel wurden eingegeben
-        if ((start.x >= 0) && (start.y >= 0) && (ziel.x >= 0) && (ziel.y >= 0)) {
-            // Start ist eine Figur, dann Angriffsart auslesen.
-            if (Figur.class.isInstance(Spiel.spielbrett.getFeld(start))) {
+        // Start und Ziel wurden eingegeben und sind auf dem Spielbrett
+        if (Spiel.getSpielbrett().isInBounds(start) && Spiel.getSpielbrett().isInBounds(ziel)) {
+            // Start ist eine Figur
+            if (Figur.class.isInstance(Spiel.getSpielbrett().getFeld(start))) {
                 // Start Figur gehört Spieler
-                if (((Figur) (Spiel.spielbrett.getFeld(start))).getTeam().equals(spieler)) {
+                if (((Figur) (Spiel.getSpielbrett().getFeld(start))).getTeam().equals(spieler)) {
                     // Ziel ist eine Figur
-                    if (Figur.class.isInstance(Spiel.spielbrett.getFeld(ziel))) {
+                    if (Figur.class.isInstance(Spiel.getSpielbrett().getFeld(ziel))) {
                         // Figur kann Ziel angreifen
-                        if (((Figur) (Spiel.spielbrett.getFeld(start))).angriffMoeglich(ziel)) {
+                        if (((Figur) (Spiel.getSpielbrett().getFeld(start))).angriffMoeglich(ziel)) {
                             final String ssp = eingabe.replaceAll(".*?(schere|stein|papier).*", "$1");
                             if (ssp.contains("schere") || ssp.contains("stein") || ssp.contains("papier")) {
                                 // Füge neuen Kampf zu Kämpfe hinzu
-                                Spiel.kaempfe.add(new Kampf((Figur) (Spiel.spielbrett.getFeld(start)),
-                                        (Figur) (Spiel.spielbrett.getFeld(ziel)), ssp));
+                                Spiel.kaempfe.add(new Kampf((Figur) (Spiel.getSpielbrett().getFeld(start)),
+                                        (Figur) (Spiel.getSpielbrett().getFeld(ziel)), ssp));
+                                Spiel.setNachrichtTemporaerKurz("");
                             } else {
                                 Spiel.setNachrichtTemporaerKurz(
                                         "Angriff nicht möglich: Angriffsart wurde nicht korrekt eingegeben.");
@@ -485,7 +502,7 @@ public class Spiel {
             Spiel.clearConsole();
         }
 
-        Spiel.spielbrett.printBoard(brett);
+        Spiel.getSpielbrett().printBoard(brett);
 
         for (final String s : Spiel.nachricht) {
             Spiel.printNachricht(s);

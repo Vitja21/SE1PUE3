@@ -261,7 +261,7 @@ public class Spielbrett {
         }
     }
 
-    private boolean isInBounds(final Point p) {
+    public boolean isInBounds(final Point p) {
         if ((p.x >= 0) && (p.x < this.xLaenge) && (p.y >= 0) && (p.y < this.yLaenge)) {
             return true;
         } else {
