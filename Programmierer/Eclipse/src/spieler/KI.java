@@ -22,7 +22,7 @@ public abstract class KI extends Spieler {
 
     public KI(int nummer) {
 	super(nummer);
-	spielfeld = spielfeldInterpreter();
+//	spielfeld = spielfeldInterpreter();
     }
 
 //    private ArrayList<Spielobjekt> berechneFeindBewegung() {
