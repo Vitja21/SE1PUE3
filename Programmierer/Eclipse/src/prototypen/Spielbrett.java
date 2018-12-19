@@ -294,7 +294,11 @@ public class Spielbrett {
             return this.spielobjekte[ziel.y][ziel.x];
         } else {
             final Spielobjekt leeresObjekt = new Spielobjekt(' ');
-            leeresObjekt.setPosition(new Point(-1, -1));
+            if (this.isInBounds(ziel)) {
+                leeresObjekt.setPosition(ziel);
+            } else {
+                leeresObjekt.setPosition(new Point(-1, -1));
+            }
             return leeresObjekt;
         }
     }
