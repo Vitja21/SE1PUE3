@@ -63,6 +63,7 @@ public class Team1 {
 	return null;
     }
 
+    // nicht notwendig, wenn wir keine wrapper klasse benutzen
     char[][] getSpielfeld() {
 
 	/*
