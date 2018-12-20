@@ -3,6 +3,7 @@ package spielobjekte;
 import java.awt.Point;
 
 import prototypen.Spiel;
+import prototypen.Spielbrett;
 
 public class Spielobjekt {
 
@@ -42,7 +43,8 @@ public class Spielobjekt {
         this.position = position;
     }
 
-    public boolean bewegungMoeglich(final Point ziel, final boolean figurenZaehlen, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
+            final boolean setMessage) {
         if (setMessage) {
             Spiel.setNachrichtTemporaerKurz("Bewegung nicht möglich: Spielobjekt ist keine Figur.");
         }

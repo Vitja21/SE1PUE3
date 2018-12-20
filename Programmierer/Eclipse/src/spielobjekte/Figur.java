@@ -73,12 +73,9 @@ public abstract class Figur extends Spielobjekt {
         }
     }
 
-    public void bewegen(final Point ziel) {
-
-        if (this.bewegungMoeglich(ziel, true, true)) {
-            Spiel.getSpielbrett().bewege(this.getPosition(), ziel);
-            this.istBewegt = true;
-        }
+    public void bewegen(final Spielbrett spielbrett, final Point ziel) {
+        spielbrett.bewege(this.getPosition(), ziel);
+        this.istBewegt = true;
     }
 
     public void angreifen() {
@@ -227,12 +224,13 @@ public abstract class Figur extends Spielobjekt {
     }
 
     @Override
-    public boolean bewegungMoeglich(final Point ziel, final boolean figurenZaehlen, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
+            final boolean setMessage) {
 
         if (figurenZaehlen) {
             if (!this.istBewegt(setMessage)
-                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
-                    && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && spielbrett.bewegungMoeglichBelegt(ziel, setMessage)
                     && this.bewegungMoeglichRaster(ziel, setMessage)) {
                 return true;
             } else {
@@ -240,8 +238,8 @@ public abstract class Figur extends Spielobjekt {
             }
         } else {
             if (!this.istBewegt(setMessage)
-                    && Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
-                    && !(Spielbrett.getInstance().getFeld(ziel) instanceof Hindernis)
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && !(spielbrett.getFeld(ziel) instanceof Hindernis)
                     && this.bewegungMoeglichRaster(ziel, setMessage)) {
                 return true;
             } else {

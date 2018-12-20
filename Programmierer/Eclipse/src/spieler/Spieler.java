@@ -1,16 +1,14 @@
 package spieler;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
-import prototypen.Spiel;
+import prototypen.Spielbrett;
 import spielobjekte.Bogenschuetze;
 import spielobjekte.Figur;
 import spielobjekte.Lanzentraeger;
 import spielobjekte.Magier;
 import spielobjekte.Reiter;
 import spielobjekte.Schwertkaempfer;
-import spielobjekte.Spielobjekt;
 
 public abstract class Spieler {
     protected int nummer;
@@ -21,6 +19,9 @@ public abstract class Spieler {
         this.generateHelden();
     }
 
+    /**
+     * Erstellt und fügt alle Helden, die ein Spieler hat dem Spieler hinzu.
+     */
     private void generateHelden() {
         this.helden.add(new Schwertkaempfer(this));
         this.helden.add(new Bogenschuetze(this));
@@ -29,14 +30,24 @@ public abstract class Spieler {
         this.helden.add(new Magier(this));
     }
 
-    public void bewegungsphase() {
-
-    }
-
+    /**
+     * Gibt die Nummer des Spielers wieder
+     *
+     * @return ein int, das die Nummer des Spielers darstellt
+     */
     public int getNummer() {
         return this.nummer;
     }
 
+    /**
+     * Überprüft {@code this} auf Gleichheit mit einem beliebigen anderen Objekt.
+     *
+     * @param   obj     ein Objekt, das mit {@code this} verglichen wird
+     *
+     * @return  true:   {@code this} ist gleich dem Objekt<br/>
+     *          false:  {@code this} ist ungleich dem Objekt
+     *
+     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -57,40 +68,48 @@ public abstract class Spieler {
         return true;
     }
 
+    /**
+     * Setzt die Nummer des Spielers auf {@code nummer}.
+     *
+     * @param nummer ein int, das die zu setztende Nummer enthält.
+     */
     private void setNummer(final int nummer) {
         this.nummer = nummer;
     }
 
+    /**
+     * Gibt die Helden des Spieler zurück.
+     *
+     * @return eine ArrayList&lt;Figur&gt;, die die Helden des Spielers enthält.
+     */
     public ArrayList<Figur> getHelden() {
         return this.helden;
     }
 
-    public boolean hatNochNichtBewegteFiguren(final Spielobjekt[][] brettAlt) {
+    /**
+     * Gibt wieder, ob der Spieler noch nicht bewegte Figuren im aktuellen Spielbrett hat und markiert diese
+     * als aktiv auf einem übergebenen Spielobjekt[][].
+     *
+     * @param   brettAlt    ein Spielobjekt[][], auf dem die Figuren als aktiv markiert werden.
+     * @return  true:       Spieler hat noch nicht bewegte Figuren<br/>
+     *          false:      Spieler hat keine noch nicht bewegten Figuren
+     */
+    public boolean hatNochNichtBewegteFiguren(final Spielbrett brettAlt) {
         boolean hatNoch = false;
         for (final Figur f : this.helden) {
             if (!f.istBewegt(false)) {
-                ((Figur) (brettAlt[f.getPosition().y][f.getPosition().x])).symbolAddMarkActive();
+                ((Figur) (brettAlt.getFeld(f.getPosition()))).symbolAddMarkActive();
                 hatNoch = true;
             }
         }
         return hatNoch;
     }
 
-    public void addMovementMarks(final Spielobjekt[][] brettAlt) {
-        for (final Figur f : this.helden) {
-            if (!f.istBewegt(false)) {
-                for (int y = 0; y < brettAlt.length; y++) {
-                    for (int x = 0; x < brettAlt[y].length; x++) {
-                        if (f.bewegungMoeglich(new Point(x, y), false, false)) {
-                            brettAlt[y][x].symbolAddMarkMovementPossible();
-                        }
-                    }
-                }
-                Spiel.setNachrichtTemporaerKurz("");
-            }
-        }
-    }
-
+    /**
+     * Gibt an, ob der Spieler besiegt wurde.
+     * @return  true:   Der Spieler ist besiegt.<br/>
+     *          false:  Der Spieler ist nicht besiegt.
+     */
     public boolean istBesiegt() {
 
         if (this.helden.size() == 0) {
@@ -99,8 +118,30 @@ public abstract class Spieler {
         return false;
     }
 
+    /**
+     * Entfernt einen Figur von den Helden des Spielers.
+     *
+     * @param figur eine Figur, die von den Helden des Spielers entfernt werden soll.
+     */
     public void entferneHeld(final Figur figur) {
         this.helden.remove(figur);
     }
 
+    /**
+     * Setzt das "istBewegt" Attribut aller Figuren des Spielers auf {@code false}.
+     */
+    public void resetHeldenIstBewegt() {
+        for (final Figur f : this.getHelden()) {
+            f.setIstBewegt(false);
+        }
+    }
+
+    /**
+     * Setzt das "istBewegt" Attribut aller Figuren des Spielers auf {@code true}.
+     */
+    public void warten() {
+        for (final Figur f : this.getHelden()) {
+            f.setIstBewegt(true);
+        }
+    }
 }
