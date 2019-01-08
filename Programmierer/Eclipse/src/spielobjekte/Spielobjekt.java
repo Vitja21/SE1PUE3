@@ -2,11 +2,12 @@ package spielobjekte;
 
 import java.awt.Point;
 
+import main.Spiel;
+
 public class Spielobjekt {
 
     private Point position;
-    protected char[][] symbol = { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', },
-            { ' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+    protected char[][] symbol = { { ' ', ' ', ' ', ' ', ' ', ' ', ' ', }, { ' ', ' ', ' ', ' ', ' ', ' ', ' ', },
             { ' ', ' ', ' ', ' ', ' ', ' ', ' ', } };
 
     public Spielobjekt(final char symbol) {
@@ -29,6 +30,9 @@ public class Spielobjekt {
         if (this.symbol[1][3] == ' ') {
             return true;
         }
+        if (this.symbol[1][3] == '+') {
+            return true;
+        }
         return false;
     }
 
@@ -40,7 +44,11 @@ public class Spielobjekt {
         this.position = position;
     }
 
-    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
+            final boolean setMessage) {
+        if (setMessage) {
+            Spiel.setNachrichtTemporaerKurz("Bewegung nicht möglich: Spielobjekt ist keine Figur.");
+        }
         return false;
     }
 
@@ -53,12 +61,24 @@ public class Spielobjekt {
     }
 
     public void symbolAddMarkMovementPossible() {
-        this.symbol[1][3] = '.';
+        this.symbol[1][3] = '+';
     }
 
     public void symbolRemoveMarkMovementPossible() {
-        if (this.symbol[1][3] == '.') {
-            this.symbol[1][3] = ' ';
-        }
+        this.symbol[1][3] = ' ';
+    }
+
+    public void symbolAddMarkMovementPossibleFigur() {
+        this.symbol[0][0] = '┌';
+        this.symbol[0][6] = '┐';
+        this.symbol[2][0] = '└';
+        this.symbol[2][6] = '┘';
+    }
+
+    public void symbolRemoveMarkMovementPossibleFigur() {
+        this.symbol[0][0] = ' ';
+        this.symbol[0][6] = ' ';
+        this.symbol[2][0] = ' ';
+        this.symbol[2][6] = ' ';
     }
 }

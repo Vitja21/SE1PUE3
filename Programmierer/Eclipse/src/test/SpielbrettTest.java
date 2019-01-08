@@ -1,11 +1,11 @@
-package testFuerMenschen;
+package test;
 
-import prototypen.Spiel;
+import main.Spiel;
 
 public class SpielbrettTest {
 
     public static void main(final String[] args) {
-        String[] arg = { "DEBUG" };
+        final String[] arg = { "DEBUG" };
         Spiel.main(arg);
     }
 }

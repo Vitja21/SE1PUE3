@@ -1,6 +1,6 @@
 package spielobjekte;
 
-import spieler.Spieler;
+import akteure.Spieler;
 
 public final class Bogenschuetze extends Figur {
 
@@ -12,7 +12,7 @@ public final class Bogenschuetze extends Figur {
             { true, false, true, false, true }, };
 
     private static char symbol = 'B';
-    private static String name = "Bogenschütze";
+    private static String name = "Bogensch�tze";
 
     private static int lebenspunkte = 1;
 

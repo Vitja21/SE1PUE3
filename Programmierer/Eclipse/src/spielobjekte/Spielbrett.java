@@ -1,17 +1,13 @@
-package prototypen;
+package spielobjekte;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 
-import spieler.Spieler;
-import spielobjekte.Figur;
-import spielobjekte.Hindernis;
-import spielobjekte.Spielobjekt;
+import akteure.Spieler;
+import main.Spiel;
 
 public class Spielbrett {
-
-    private static Spielbrett instance;
 
     private Spielobjekt[][] spielobjekte;
     private int xLaenge;
@@ -28,10 +24,15 @@ public class Spielbrett {
         return this.yLaenge;
     }
 
-    private Spielbrett() {
+    public Spielbrett() {
         this.generiereSpielbrettSpielobjektArray(10, 10);
         this.setHindernisse();
         this.setFiguren(Spiel.getSpieler1(), Spiel.getSpieler2());
+    }
+
+    public Spielbrett(final Spielobjekt[][] spielobjekte) {
+        this.spielobjekte = spielobjekte;
+        this.setDimensionen();
     }
 
     public Spielobjekt[][] copySpielobjekte() {
@@ -120,18 +121,81 @@ public class Spielbrett {
         }
     }
 
-    public static Spielbrett getInstance() {
-        if (Spielbrett.instance == null) {
-            Spielbrett.instance = new Spielbrett();
+    public static final int BEWEGUNG = 0b0001;
+    public static final int ANGREIFBAR = 0b0010;
+    public static final int AKTIV = 0b0100;
+    public static final int BEWEGUNG_FIGUR = 0b1000;
+
+    /**
+     * Entfernt Markierungen vom übergebenen Spielbrett.
+     *
+     * @param parameters
+     *            byte, das bestimmt, welche Markierungen entfernt werden sollen
+     */
+    public void removeSymbolMarks(final int parameters) {
+
+        for (int y = 0; y < this.getYLaenge(); y++) {
+            for (int x = 0; x < this.getXLaenge(); x++) {
+                if (Figur.class.isInstance(this.getFeld(new Point(x, y)))) {
+                    if ((Spielbrett.AKTIV & parameters) == Spielbrett.AKTIV) {
+                        ((Figur) (this.getFeld(new Point(x, y)))).symbolRemoveMarkActive();
+                    }
+                    if ((Spielbrett.ANGREIFBAR & parameters) == Spielbrett.ANGREIFBAR) {
+                        ((Figur) (this.getFeld(new Point(x, y)))).symbolRemoveMarkCanBeAttacked();
+                    }
+                }
+                if ((Spielbrett.BEWEGUNG & parameters) == Spielbrett.BEWEGUNG) {
+                    if (this.getFeld(new Point(x, y)).getSymbol()[1][3] == '+') {
+                        this.getFeld(new Point(x, y)).symbolRemoveMarkMovementPossible();
+                    }
+                }
+                if ((Spielbrett.BEWEGUNG_FIGUR & parameters) == Spielbrett.BEWEGUNG_FIGUR) {
+                    this.getFeld(new Point(x, y)).symbolRemoveMarkMovementPossibleFigur();
+                }
+            }
         }
-        return Spielbrett.instance;
     }
 
-    public void reset() {
-        Spielbrett.instance = null;
+    /**
+     * Markiert alle Bewegungsmöglichkeiten der Helden des Spielers auf dem
+     * übergebenen Spielobjekt[][]
+     *
+     * @param brettAlt
+     *            ein Spielobjekt[][], auf dem die Bewegungsmöglichkeiten markiert
+     *            werden. spieler ein Spieler, dessen Bewegungsmöglichkeiten
+     *            markiert werden sollen.
+     */
+    public void addMovementMarks(final Spieler spieler) {
+        for (final Figur f : spieler.getHelden()) {
+            if (!f.istBewegt(false)) {
+                ((Figur) (this.getFeld(f.getPosition()))).symbolAddMarkActive();
+                for (int y = 0; y < this.getYLaenge(); y++) {
+                    for (int x = 0; x < this.getXLaenge(); x++) {
+                        if (f.bewegungMoeglich(this, new Point(x, y), false, false)
+                                && this.getFeld(new Point(x, y)).isEmpty()) {
+                            this.getFeld(new Point(x, y)).symbolAddMarkMovementPossible();
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    void printBoard(final Spielobjekt[][] brett) {
+    public void addMovementMarksFigur(final Figur f) {
+        if (!f.istBewegt(false)) {
+            ((Figur) (this.getFeld(f.getPosition()))).symbolAddMarkActive();
+            for (int y = 0; y < this.getYLaenge(); y++) {
+                for (int x = 0; x < this.getXLaenge(); x++) {
+                    if (f.bewegungMoeglich(Spiel.getSpielbrett(), new Point(x, y), false, false)
+                            && (this.getFeld(new Point(x, y)).getSymbol()[1][3] == '+')) {
+                        this.getFeld(new Point(x, y)).symbolAddMarkMovementPossibleFigur();
+                    }
+                }
+            }
+        }
+    }
+
+    public void printBoard() {
 
         // Geraden (Benennungsschema: Uhrzeigersinn, Start bei Oben)
         final char OBEN_UNTEN = '│';
@@ -181,7 +245,7 @@ public class Spielbrett {
                 // SPIELFELDINHALT
                 for (int x = 0; x < this.xLaenge; x++) {
                     for (int j = 0; j < this.xFeldLaenge; j++) {
-                        output.append(brett[y][x].getSymbol()[i][j]);
+                        output.append(this.spielobjekte[y][x].getSymbol()[i][j]);
                     }
                     output.append(OBEN_UNTEN);
                 }
@@ -261,7 +325,7 @@ public class Spielbrett {
         }
     }
 
-    private boolean isInBounds(final Point p) {
+    public boolean isInBounds(final Point p) {
         if ((p.x >= 0) && (p.x < this.xLaenge) && (p.y >= 0) && (p.y < this.yLaenge)) {
             return true;
         } else {
@@ -269,6 +333,7 @@ public class Spielbrett {
         }
     }
 
+    // überprüft, ob das zielfeld bereits belegt ist
     public boolean bewegungMoeglichBelegt(final Point ziel, final boolean setMessage) {
 
         final boolean moeglich = ((this.getFeld(ziel) == null) || this.getFeld(ziel).isEmpty());
@@ -278,6 +343,8 @@ public class Spielbrett {
         return moeglich;
     }
 
+    // überprüft, ob das zielfeld innerhalb des spielfelds liegt und nicht
+    // gleichzeitig das startfeld ist
     public boolean bewegungMoeglichSpielfeld(final Point start, final Point ziel, final boolean setMessage) {
 
         final boolean moeglich = (this.isInBounds(start) && this.isInBounds(ziel) && !start.equals(ziel));
@@ -289,8 +356,7 @@ public class Spielbrett {
 
     public Spielobjekt getFeld(final Point ziel) {
 
-        if (this.isInBounds(ziel) && (this.spielobjekte[ziel.y][ziel.x] != null)
-                && !this.spielobjekte[ziel.y][ziel.x].isEmpty()) {
+        if (this.isInBounds(ziel)) {
             return this.spielobjekte[ziel.y][ziel.x];
         } else {
             final Spielobjekt leeresObjekt = new Spielobjekt(' ');
@@ -325,6 +391,14 @@ public class Spielbrett {
                     this.setFeld(new Point(x, y), leeresObjekt);
                 }
             }
+        }
+    }
+
+    public boolean isFigur(final Spielobjekt obj) {
+        if (obj instanceof Figur) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

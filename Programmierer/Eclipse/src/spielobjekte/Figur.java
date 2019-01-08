@@ -3,9 +3,8 @@ package spielobjekte;
 import java.awt.Point;
 import java.util.Arrays;
 
-import prototypen.Spiel;
-import prototypen.Spielbrett;
-import spieler.Spieler;
+import akteure.Spieler;
+import main.Spiel;
 
 public abstract class Figur extends Spielobjekt {
 
@@ -73,16 +72,9 @@ public abstract class Figur extends Spielobjekt {
         }
     }
 
-    public void bewegen(final Point ziel) {
-
-        if (this.bewegungMoeglich(ziel, true)) {
-            Spiel.getSpielbrett().bewege(this.getPosition(), ziel);
-            this.istBewegt = true;
-        }
-    }
-
-    public void angreifen() {
-        // TODO
+    public void bewegen(final Spielbrett spielbrett, final Point ziel) {
+        spielbrett.bewege(this.getPosition(), ziel);
+        this.istBewegt = true;
     }
 
     public int getLebenspunkte() {
@@ -109,6 +101,7 @@ public abstract class Figur extends Spielobjekt {
         this.angriffsRaster = angriffsRaster;
     }
 
+    // überprüft, ob das zielfeld im bewegungsmuster der figur liegt
     protected boolean bewegungMoeglichRaster(final Point ziel, final boolean setMessage) {
 
         if ((this.getBewegungsRaster().length > 0) && (this.getBewegungsRaster()[0].length > 0)) {
@@ -135,6 +128,7 @@ public abstract class Figur extends Spielobjekt {
         return false;
     }
 
+    // überprüft, ob das angriffsziel im angriffsmuster der figur liegt
     protected boolean angriffMoeglichRaster(final Point ziel) {
 
         if ((this.getAngriffsRaster().length > 0) && (this.getAngriffsRaster()[0].length > 0)) {
@@ -148,8 +142,7 @@ public abstract class Figur extends Spielobjekt {
                     && ((angriffsRasterStartY + relativY) < this.getAngriffsRaster().length)) {
                 if (((angriffsRasterStartX + relativX) >= 0) && ((angriffsRasterStartX
                         + relativX) < this.getAngriffsRaster()[angriffsRasterStartY + relativY].length)) {
-                    return this.getAngriffsRaster()[angriffsRasterStartY + relativY][angriffsRasterStartX
-                            + relativX];
+                    return this.getAngriffsRaster()[angriffsRasterStartY + relativY][angriffsRasterStartX + relativX];
                 }
             }
         }
@@ -197,11 +190,15 @@ public abstract class Figur extends Spielobjekt {
         return true;
     }
 
+    // überprüft, ob der angriff auf das ausgewählte ziel möglich ist
     @Override
     public boolean angriffMoeglich(final Point ziel) {
 
+        // überprüft, ob das angriffsziel im angriffsmuster der figur liegt
         if (this.angriffMoeglichRaster(ziel)) {
+            // überprüft, ob das angriffsziel im gegnerischen team ist
             if (Spiel.getSpielbrett().getFeld(ziel).istAngreifbar(this)) {
+                // überprüft, ob es mögliche kämpfe gibt
                 if (Spiel.getKaempfe().size() > 0) {
                     for (final Kampf k : Spiel.getKaempfe()) {
                         if (this.equals(k.getAngreifer())) {
@@ -217,6 +214,7 @@ public abstract class Figur extends Spielobjekt {
         return false;
     }
 
+    // überprüft, ob das angriffsziel im gegnerischen team ist
     @Override
     public boolean istAngreifbar(final Figur f) {
         if (this.getTeam() == f.getTeam()) {
@@ -226,16 +224,31 @@ public abstract class Figur extends Spielobjekt {
         }
     }
 
+    // überprüft, ob diese figur sich auf ein zielfeld bewegen kann
     @Override
-    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
+            final boolean setMessage) {
 
-        if (Spielbrett.getInstance().bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
-                && Spielbrett.getInstance().bewegungMoeglichBelegt(ziel, setMessage)
-                && this.bewegungMoeglichRaster(ziel, setMessage)
-                && !this.istBewegt) {
-            return true;
+        if (figurenZaehlen) {
+            if (!this.istBewegt(setMessage)
+                    // erklärungen bei den jeweiligen methoden
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && spielbrett.bewegungMoeglichBelegt(ziel, setMessage)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            if (!this.istBewegt(setMessage)
+                    // erklärungen bei den jeweiligen methoden
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && !(spielbrett.getFeld(ziel) instanceof Hindernis)
+                    && this.bewegungMoeglichRaster(ziel, setMessage)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
@@ -255,7 +268,10 @@ public abstract class Figur extends Spielobjekt {
         }
     }
 
-    public boolean istBewegt() {
+    public boolean istBewegt(final boolean setMessage) {
+        if (!this.istBewegt && setMessage) {
+            Spiel.setNachrichtTemporaerKurz("Bewegung nicht möglich: Figur wurde bereits bewegt.");
+        }
         return this.istBewegt;
     }
 

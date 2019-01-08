@@ -1,6 +1,6 @@
 package spielobjekte;
 
-import spieler.Spieler;
+import akteure.Spieler;
 
 public final class Lanzentraeger extends Figur {
 
@@ -11,7 +11,7 @@ public final class Lanzentraeger extends Figur {
             { true, false, false, false, true }, { false, true, true, true, false }, };
 
     private static char symbol = 'L';
-    private static String name = "Lanzenträger";
+    private static String name = "Lanzentr�ger";
 
     private static int lebenspunkte = 1;
 

@@ -2,7 +2,8 @@ package spielobjekte;
 
 import java.awt.Point;
 
-import spieler.Spieler;
+import akteure.Spieler;
+import main.Spiel;
 
 public final class Reiter extends Figur {
 
@@ -22,15 +23,84 @@ public final class Reiter extends Figur {
         super(Reiter.name, Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol, team);
     }
 
+    // angepasste bewegungsabfrage f�r den reiter, da er hindernisse nicht
+    // �berspringen darf (wie bei figur, plus abfrage auf kein hindernis auf dem
+    // weg)
     @Override
-    /**
-     * Bewegungsbeschränkung für Reiter.
-     */
-    public boolean bewegungMoeglich(final Point ziel, final boolean setMessage) {
+    public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
+            final boolean setMessage) {
 
-        // TODO: Bewegungsbeschränking für Reiter.
+        if (figurenZaehlen) {
+            if (!this.istBewegt(setMessage)
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && spielbrett.bewegungMoeglichBelegt(ziel, setMessage)
+                    && this.bewegungMoeglichRaster(ziel, setMessage) && this.keinHindernisAufWeg(ziel)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (!this.istBewegt(setMessage)
+                    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
+                    && !(spielbrett.getFeld(ziel) instanceof Hindernis) && this.bewegungMoeglichRaster(ziel, setMessage)
+                    && this.keinHindernisAufWeg(ziel)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
-        return super.bewegungMoeglich(ziel, setMessage);
+    // �berpr�ft alle felder zwischen der figur und dem zielfeld, ob dort ein
+    // hindernis liegt, wenn ja ist die bewegung nicht m�glich
+    private boolean keinHindernisAufWeg(final Point ziel) {
 
+        boolean keinHindernis = true;
+
+        final Spielobjekt[][] brett = Spiel.getSpielbrett().copySpielobjekte();
+
+        final int startX = this.getPosition().x;
+        final int startY = this.getPosition().y;
+        final int zielX = ziel.x;
+        final int zielY = ziel.y;
+
+        // �berpr�fen Y-Achse
+        if (startX == zielX) {
+            // nach unten
+            if ((startY - zielY) < 0) {
+                for (int y = startY + 1; y < zielY; y++) {
+                    if (brett[y][startX] instanceof Hindernis) {
+                        keinHindernis = false;
+                    }
+                }
+                // nach oben
+            } else {
+                for (int y = zielY + 1; y < startY; y++) {
+                    if (brett[y][startX] instanceof Hindernis) {
+                        keinHindernis = false;
+                    }
+                }
+            }
+
+            // �berpr�fen X-Achse
+        } else if (startY == zielY) {
+            // nach rechts
+            if ((startX - zielX) < 0) {
+                for (int x = startX + 1; x < zielX; x++) {
+                    if (brett[startY][x] instanceof Hindernis) {
+                        keinHindernis = false;
+                    }
+                }
+                // nach links
+            } else {
+                for (int x = zielX + 1; x < startX; x++) {
+                    if (brett[startY][x] instanceof Hindernis) {
+                        keinHindernis = false;
+                    }
+                }
+            }
+        }
+
+        return keinHindernis;
     }
 }
