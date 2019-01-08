@@ -2,7 +2,7 @@ package spielobjekte;
 
 import java.util.ArrayList;
 
-import prototypen.Spiel;
+import main.Spiel;
 
 public class Kampf {
 

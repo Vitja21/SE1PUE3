@@ -3,9 +3,8 @@ package spielobjekte;
 import java.awt.Point;
 import java.util.Arrays;
 
-import prototypen.Spiel;
-import prototypen.Spielbrett;
-import spieler.Spieler;
+import akteure.Spieler;
+import main.Spiel;
 
 public abstract class Figur extends Spielobjekt {
 
@@ -232,7 +231,7 @@ public abstract class Figur extends Spielobjekt {
 
 	if (figurenZaehlen) {
 	    if (!this.istBewegt(setMessage)
-		    // erklärungen bei den jeweiligen methoden
+		    // erklärungen bei den jeweiligen methoden	
 		    && spielbrett.bewegungMoeglichSpielfeld(this.getPosition(), ziel, setMessage)
 		    && spielbrett.bewegungMoeglichBelegt(ziel, setMessage)
 		    && this.bewegungMoeglichRaster(ziel, setMessage)) {

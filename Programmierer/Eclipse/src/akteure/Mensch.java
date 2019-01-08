@@ -1,4 +1,4 @@
-package spieler;
+package akteure;
 
 public class Mensch extends Spieler {
 

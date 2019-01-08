@@ -2,9 +2,8 @@ package spielobjekte;
 
 import java.awt.Point;
 
-import prototypen.Spiel;
-import prototypen.Spielbrett;
-import spieler.Spieler;
+import akteure.Spieler;
+import main.Spiel;
 
 public final class Reiter extends Figur {
 
@@ -24,8 +23,8 @@ public final class Reiter extends Figur {
 	super(Reiter.name, Reiter.lebenspunkte, Reiter.bewegungsRaster, Reiter.angriffsRaster, Reiter.symbol, team);
     }
 
-    // angepasste bewegungsabfrage für den reiter, da er hindernisse nicht
-    // überspringen darf (wie bei figur, plus abfrage auf kein hindernis auf dem
+    // angepasste bewegungsabfrage f�r den reiter, da er hindernisse nicht
+    // �berspringen darf (wie bei figur, plus abfrage auf kein hindernis auf dem
     // weg)
     @Override
     public boolean bewegungMoeglich(final Spielbrett spielbrett, final Point ziel, final boolean figurenZaehlen,
@@ -52,8 +51,8 @@ public final class Reiter extends Figur {
 	}
     }
 
-    // überprüft alle felder zwischen der figur und dem zielfeld, ob dort ein
-    // hindernis liegt, wenn ja ist die bewegung nicht möglich
+    // �berpr�ft alle felder zwischen der figur und dem zielfeld, ob dort ein
+    // hindernis liegt, wenn ja ist die bewegung nicht m�glich
     private boolean keinHindernisAufWeg(final Point ziel) {
 
 	boolean keinHindernis = true;
@@ -65,7 +64,7 @@ public final class Reiter extends Figur {
 	final int zielX = ziel.x;
 	final int zielY = ziel.y;
 
-	// Überprüfen Y-Achse
+	// �berpr�fen Y-Achse
 	if (startX == zielX) {
 	    // nach unten
 	    if ((startY - zielY) < 0) {
@@ -83,7 +82,7 @@ public final class Reiter extends Figur {
 		}
 	    }
 
-	    // Überprüfen X-Achse
+	    // �berpr�fen X-Achse
 	} else if (startY == zielY) {
 	    // nach rechts
 	    if ((startX - zielX) < 0) {

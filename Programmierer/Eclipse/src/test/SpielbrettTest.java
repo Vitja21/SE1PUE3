@@ -1,6 +1,6 @@
-package testFuerMenschen;
+package test;
 
-import prototypen.Spiel;
+import main.Spiel;
 
 public class SpielbrettTest {
 

@@ -1,6 +1,6 @@
 package spielobjekte;
 
-import spieler.Spieler;
+import akteure.Spieler;
 
 public final class Schwertkaempfer extends Figur {
 
@@ -9,7 +9,7 @@ public final class Schwertkaempfer extends Figur {
     private static boolean[][] angriffsRaster = { { true, true, true }, { true, false, true }, { true, true, true }, };
 
     private static char symbol = 'S';
-    private static String name = "Schwertkämpfer";
+    private static String name = "Schwertk�mpfer";
 
     private static int lebenspunkte = 3;
 

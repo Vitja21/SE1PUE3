@@ -1,8 +1,8 @@
-package spieler;
+package akteure;
 
 import java.util.List;
 
-import prototypen.Spiel;
+import main.Spiel;
 import spielobjekte.Figur;
 
 public class Team1 {
@@ -69,7 +69,7 @@ public class Team1 {
 	/*
 	 * Symbole:
 	 * 
-	 * B - Bogenschütze L - Lanzenträger M - Magier R - Reiter S - Schwertkämpfer #
+	 * B - Bogensch�tze L - Lanzentr�ger M - Magier R - Reiter S - Schwertk�mpfer #
 	 * - Hindernis
 	 * 
 	 */
@@ -83,7 +83,7 @@ public class Team1 {
 		case "Bogenschuetze":
 		    symbol = 'B';
 		    break;
-		case "Lanzenträger":
+		case "Lanzentr�ger":
 		    symbol = 'L';
 		    break;
 		case "Magier":
@@ -92,7 +92,7 @@ public class Team1 {
 		case "Reiter":
 		    symbol = 'R';
 		    break;
-		case "Schwertkämpfer":
+		case "Schwertk�mpfer":
 		    symbol = 'S';
 		    break;
 		case "Hindernis":

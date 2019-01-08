@@ -2,8 +2,8 @@ package spielobjekte;
 
 import java.awt.Point;
 
-import prototypen.Spiel;
-import spieler.Spieler;
+import akteure.Spieler;
+import main.Spiel;
 
 public final class Magier extends Figur {
 

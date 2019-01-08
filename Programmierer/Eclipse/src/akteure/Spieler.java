@@ -1,14 +1,14 @@
-package spieler;
+package akteure;
 
 import java.util.ArrayList;
 
-import prototypen.Spielbrett;
 import spielobjekte.Bogenschuetze;
 import spielobjekte.Figur;
 import spielobjekte.Lanzentraeger;
 import spielobjekte.Magier;
 import spielobjekte.Reiter;
 import spielobjekte.Schwertkaempfer;
+import spielobjekte.Spielbrett;
 
 public abstract class Spieler {
     protected int nummer;
@@ -20,7 +20,7 @@ public abstract class Spieler {
     }
 
     /**
-     * Erstellt und fügt alle Helden, die ein Spieler hat dem Spieler hinzu.
+     * Erstellt und f�gt alle Helden, die ein Spieler hat dem Spieler hinzu.
      */
     private void generateHelden() {
         this.helden.add(new Schwertkaempfer(this));
@@ -40,7 +40,7 @@ public abstract class Spieler {
     }
 
     /**
-     * Überprüft {@code this} auf Gleichheit mit einem beliebigen anderen Objekt.
+     * �berpr�ft {@code this} auf Gleichheit mit einem beliebigen anderen Objekt.
      *
      * @param   obj     ein Objekt, das mit {@code this} verglichen wird
      *
@@ -71,16 +71,16 @@ public abstract class Spieler {
     /**
      * Setzt die Nummer des Spielers auf {@code nummer}.
      *
-     * @param nummer ein int, das die zu setztende Nummer enthält.
+     * @param nummer ein int, das die zu setztende Nummer enth�lt.
      */
     private void setNummer(final int nummer) {
         this.nummer = nummer;
     }
 
     /**
-     * Gibt die Helden des Spieler zurück.
+     * Gibt die Helden des Spieler zur�ck.
      *
-     * @return eine ArrayList&lt;Figur&gt;, die die Helden des Spielers enthält.
+     * @return eine ArrayList&lt;Figur&gt;, die die Helden des Spielers enth�lt.
      */
     public ArrayList<Figur> getHelden() {
         return this.helden;
@@ -88,7 +88,7 @@ public abstract class Spieler {
 
     /**
      * Gibt wieder, ob der Spieler noch nicht bewegte Figuren im aktuellen Spielbrett hat und markiert diese
-     * als aktiv auf einem übergebenen Spielobjekt[][].
+     * als aktiv auf einem �bergebenen Spielobjekt[][].
      *
      * @param   brettAlt    ein Spielobjekt[][], auf dem die Figuren als aktiv markiert werden.
      * @return  true:       Spieler hat noch nicht bewegte Figuren<br/>
@@ -143,5 +143,10 @@ public abstract class Spieler {
         for (final Figur f : this.getHelden()) {
             f.setIstBewegt(true);
         }
+    }
+    
+    @Override
+    public String toString() {
+	return "Spieler " + this.nummer;
     }
 }
