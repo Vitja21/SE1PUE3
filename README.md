@@ -6,10 +6,10 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
 ## Designer
  - [x] OOA
       - [x] Pflichtenheft
- - [ ] OOD
+ - [x] OOD
       - [x] Anwendungsfalldiagramm
       - [x] Aktivitätsdiagramme Runde
-      - [ ] Aktivitätsdiagramm KI
+      - [x] Aktivitätsdiagramm KI
       - [x] Klassendiagramm
 ## Programmierer
  - [ ] KI
@@ -31,12 +31,11 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
  ## Tester
  - [ ] Testen
  - [ ] Testprotokoll erstellen
- - [ ] Testplan überlegen
- - [ ] Testfälle überlegen
- - [ ] Überlegung zur Qualitässicherung
+ - [x] Testplan überlegen
+ - [x] Testfälle überlegen
+ - [x] Überlegung zur Qualitässicherung
  - [x] Erstellung einheitliche Formular zur Dokumentation 
 
 ## Termine
 
-Di 18.12.18 __Gruppentreffen__
-DO 20.12.18 __Gruppentreffen__
+
