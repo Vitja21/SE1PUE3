@@ -144,9 +144,4 @@ public abstract class Spieler {
             f.setIstBewegt(true);
         }
     }
-    
-    @Override
-    public String toString() {
-	return "Spieler " + this.nummer;
-    }
 }

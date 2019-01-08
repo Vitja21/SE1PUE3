@@ -2,13 +2,13 @@ package akteure;
 
 public class Mensch extends Spieler {
 
-    public Mensch(int nummer) {
-	super(nummer);
+    public Mensch(final int nummer) {
+        super(nummer);
     }
 
-    private int[] koordZuFeldIndex(String koord) {
-	int[] feldindex = new int[2];
-	return feldindex;
+    private int[] koordZuFeldIndex(final String koord) {
+        final int[] feldindex = new int[2];
+        return feldindex;
     }
 
     private void waehleBewegung() {
