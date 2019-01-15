@@ -1,5 +1,5 @@
 # SE1PUE3
-Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
+Dies ist die Pflichtübung 3 für SE1 des Teams Kalbfleisch
 
 ## TO DO
 
@@ -12,29 +12,33 @@ Dies ist die Pflichtübung 3 für SE1 des Teams __P.F.U__
       - [x] Aktivitätsdiagramm KI
       - [x] Klassendiagramm
 ## Programmierer
- - [ ] KI
-      - [ ] KI_Leicht
-      - [ ] KI_Mittel
-      - [ ] KI_Schwer
+ - [X] KI
+      - [X] KI_Leicht
+      - [X] KI_Mittel
+      - [X] KI_Schwer
  - [x] Brett
+      - [x] Hindernisse
  - [x] Armee
       - [x] Magier
       - [x] Pikinier
       - [x] Reiter
       - [x] Bogenshütze
       - [x] Schwertkämpfer
- - [ ] Sequenzen
+ - [x] Sequenzen
       - [x] Laufsequenz
-      - [ ] Kampfsequenz
- - [x] Hindernisse
- - [ ] Integration der KI von anderen Teams
+      - [x] Kampfsequenz
  ## Tester
- - [ ] Testen
- - [ ] Testprotokoll erstellen
+ - [X] Testen
+ - [X] Testprotokoll erstellen
  - [x] Testplan überlegen
  - [x] Testfälle überlegen
  - [x] Überlegung zur Qualitässicherung
- - [x] Erstellung einheitliche Formular zur Dokumentation 
+ - [x] Erstellung einheitliche Formular zur Dokumentation
+ 
+ ## Turnier 
+ - [ ] Integration der KI von anderen Teams ( Wrapper Class)
+ - [ ] Treffen der Programmierer mit den zwei anderen Programierteams 
+ - [ ] Turnier selbst
 
 ## Termine
 
