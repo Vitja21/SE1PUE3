@@ -233,6 +233,8 @@ public class Spiel {
         final Point start = new Point(eingabeKoordinaten[0], eingabeKoordinaten[1]);
         final Point ziel = new Point(eingabeKoordinaten[2], eingabeKoordinaten[3]);
 
+        Spiel.setNachrichtTemporaerKurz("");
+
         // Start und Ziel Punkt sind auf dem Spielbrett
         if (Spiel.getSpielbrett().isInBounds(start) && Spiel.getSpielbrett().isInBounds(ziel)) {
             // Start ist eine Figur
@@ -256,6 +258,8 @@ public class Spiel {
         } else if (Spiel.getSpielbrett().isInBounds(start)) {
             if ((Spiel.getSpielbrett().getFeld(start) instanceof Figur)) {
                 brettAlt.addMovementMarksFigur((Figur) (Spiel.getSpielbrett().getFeld(start)));
+            } else {
+                Spiel.setNachrichtTemporaerKurz("Zug nicht möglich, die eingegebenen Koordinaten waren nicht korrekt.");
             }
         } else {
             Spiel.setNachrichtTemporaerKurz("Zug nicht möglich, die eingegebenen Koordinaten waren nicht korrekt.");
