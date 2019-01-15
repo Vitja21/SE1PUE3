@@ -35,10 +35,10 @@ Dies ist die Pflichtübung 3 für SE1 des Teams Kalbfleisch
  - [x] Überlegung zur Qualitässicherung
  - [x] Erstellung einheitliche Formular zur Dokumentation
  
- ## Tunier 
+ ## Turnier 
  - [ ] Integration der KI von anderen Teams ( Wrapper Class)
  - [ ] Treffen der Programmierer mit den zwei anderen Programierteams 
- - [ ] Tunier selbst
+ - [ ] Turnier selbst
 
 ## Termine
 
